@@ -12,5 +12,27 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
+
+Route::post('/informes',array(
+    'as' => 'informes',
+    'uses'=> 'usuarioController@LoginUser'
+));
+Route::post('/logout',array(
+    'as'=> 'logout',
+    'uses' => 'usuarioController@Logout'
+));
+
+Route::get('/listaInformes','informeController@Listar');
+Route::post('/AgregarInforme','informeController@Agregar');
+Route::post('/EditarInforme','informeController@Actualizar');
+Route::post('/eliminar','informeController@Eliminar');
+Route::post('/agregarUsuario', 'usuarioController@AgregarUsuario');
+// Route::post('/listaInformesMes','nformeController@ListarxMes');
+
+
+Route::post('/descarga',array(
+    'as' => 'descargaExcel',
+    'uses' => 'informeController@exportInforme'
+));
