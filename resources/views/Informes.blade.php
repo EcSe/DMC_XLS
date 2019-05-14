@@ -10,18 +10,21 @@
     <title>Informes</title>
 </head>
 
-<body onload=cargarTabla(1)>
+<body onload="cargarTabla(1)">
+    @php $usuarioActual = session('usu'); @endphp
     <div id="navbar-example">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#tabCarga" role="tab">INFORMES</a>
             </li>
-            <li class="nav-item" name="liExcels" id="liExcels" style="display:none">
+            @if($usuarioActual->IN_ID_PERFIL == 1)
+            <li class="nav-item" name="liExcels" id="liExcels">
                 <a class="nav-link" data-toggle="tab" href="#tabDescarga" role="tab">EXCELS</a>
             </li>
-            <li class="nav-item" name="liRegistro" id="liRegistro" style="display:none">
+            <li class="nav-item" name="liRegistro" id="liRegistro">
                 <a class="nav-link" data-toggle="tab" href="#tabRegistro">REGISTRO USUARIOS</a>
             </li>
+            @endif
         </ul>
         <div>
             <form action="{{ route('logout') }}" method="POST">
@@ -31,15 +34,15 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="tabCarga" name="tabCarga" role="tabpanel">
                 <div>
-                    <h1>Informes </h1>
+                    <h1>INFORMES </h1>
                 </div>
                 <div class="container-fluid">
                     <form action="" method="POST" id="formulario">
+                        <input type="hidden" id="inputinforme" name="inputinforme">
                         <div class="row">
-                            <input type="hidden" id="inputinforme" name="inputinforme">
-                            <div class="col-12 col-md-4 form-group">
-                                <div class="col-6 col-md-2" style="display:inline;">
-                                    <select name="bandeja" id="bandeja">
+                            <div class="col-md-12 form-group" style="display: inline-flex">
+                                <div class="col col-md-4 ">
+                                    <select name="bandeja" id="bandeja" class="custom-select">
                                         <option value="" selected disabled>--Elegir Bandeja--</option>
                                         <option value="CNT">CNT</option>
                                         <option value="EMISION RAPIDA">EMISION RAPIDA</option>
@@ -51,41 +54,47 @@
                                         <option value="REPROCESOS">REPROCESOS</option>
                                     </select>
                                 </div>
-                                <div class="col-6 col-md-2" style="display:inline;">
-                                    <select name="estado" id="estado">
+                                <div class="col col-md-4">
+                                    <select name="estado" id="estado" class="custom-select">
                                         <option value="" selected disabled>--Elegir Estado--</option>
                                         <option value="ACTUALIZACION">ACTUALIZACION</option>
                                         <option value="NUEVO INGRESO">NUEVO INGRESO</option>
                                         <option value="DEVUELTO">DEVUELTO</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="email" id="remitente" name="remitente" placeholder="Ingrese Remitente"
-                                    required>
-                            </div>
-                            <div class="col-12 col-md-4 form-group">
-                                <div class="col-6" style="display:inline">
-                                    <input type="date" id="fecha" name="fecha" required>
+                                <div class="col col-md-4">
+                                    <input type="email" id="remitente" name="remitente" placeholder="Ingrese Remitente"
+                                        required>
                                 </div>
-                                <div class="col-6" style="display:inline">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display:inline-flex">
+                                <div class="col col-md-4">
+                                    <input type="text" id="cod_cliente" name="cod_cliente"
+                                        placeholder="Ingrese Cod Cliente" required>
+                                </div>
+                                <div class="col col-md-4">
+                                    <span style="float:left">Escoger Fecha &nbsp;: </span>
+                                    <input type="date" id="fecha" name="fecha" required style="float: right;">
+                                </div>
+                                <div class="col col-md-4">
+                                    <span style="float:left">Escoger Hora&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <input type="time" name="hora" id="hora" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group container">
-                            <div class="col-md-4">
-                                <input type="text" id="cod_cliente" name="cod_cliente" placeholder="Ingrese Cod Cliente"
-                                    required>
-                            </div>
-                            <div class="col-md-8">
-                                <textarea name="asunto" cols="40" rows="3" style="resize:none"
-                                    placeholder="  Ingresar asunto" id="asunto"></textarea>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display:inline-flex">
+                                <div class="col col-md-8">
+                                    <textarea name="asunto" cols="40" rows="3" style="resize:none;"
+                                        placeholder="  Ingresar asunto" id="asunto"></textarea>
+                                </div>
                             </div>
                         </div>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display:inline-flex">
+                                <div class="col col-md-6">
                                     <input class="inputbusqueda" type="text" placeholder="Buscar por Codigo Cliente..."
                                         id="buscarCliente" name="buscarCliente" onkeyup="BuscarCliente()">
                                 </div>
@@ -161,7 +170,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="tabDescarga" name="tabDescarga" role="tabpanel">
-                <h1>Excels</h1>
+                <h1>EXCELS</h1>
                 <div class="container-fluid">
                     <form action="{{ route('descargaExcel') }}" method="POST" enctype="multipart/form-data">
                         <div class="row">
@@ -188,25 +197,21 @@
                         <button type="submit">Descargar Excel</button>
                     </form>
                 </div>
-                <!-- <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input type="text" placeholder="Usuario Consulta" name="inUsuario" id="inUsuario">
-                        </div>
-                        <div>
-                            <button id="btnConsultar" onclick="cargarTabla(1)">Consultar</button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <input type="button" name="btnCargaMes" id="btnCargaMes" onclick="informesMesUsuario(this)"
+                            value="Cargar Tabla" style="display: block;margin:auto">
                     </div>
-                    <div class="row">
-                        <div class="col-md-12" id="listarTabla">
-                            <table id="tablaConteoUsuarios">
-                            </table>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tblCantidadxUser">
+                        </table>
                     </div>
-                </div> -->
+                </div>
             </div>
             <div class="tab-pane fade" id="tabRegistro" name="tabRegistro" role="tabpanel">
-                <h1>Registro Usuarios</h1>
+                <h1>REGISTRO USUARIOS</h1>
                 <form id="formUsuario" action="" method="">
                     <div class="container">
                         <div class="row">
@@ -243,8 +248,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group" >
-                                <input type="submit" class="btn btn-success" value="Agregar" style="display: block;margin:auto">
+                            <div class="col-md-12 form-group">
+                                <input type="submit" class="btn btn-success" value="Agregar"
+                                    style="display: block;margin:auto">
                             </div>
                         </div>
                     </div>

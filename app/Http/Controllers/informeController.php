@@ -100,20 +100,11 @@ class informeController extends Controller
       
     }
 
-    // public function ListarxMes(Request $request){
-    //     $usuario = session('usu');
-    //     $mesSelect = $_POST['mesSeleccionado'];
-    //     $informe_model = new informeModel();
-    //     if($usuario->IN_ID_PERFIL == 1){
-    //         $informesMen = DB::table('INFORME')->whereMonth('DT_FECHA_CREACION',$mesSelect)
-    //                                         ->orderBy('DT_FECHA_CREACION','desc')
-    //                                         ->get();
-    //     }
-    //     return response()->json([
-    //         'informesMensuales' => $informesMen,
-    //         'idPerfil' => $usuario->IN_ID_PERFIL
-    //     ]);
-    // }
+    public function InformesUsuarioMes()
+    {
+       $datosMes = DB::select('CALL USP_REGISTROS_MES');
+       return response()->json($datosMes);
+    }
 
     public function exportInforme(Request $request)
     {

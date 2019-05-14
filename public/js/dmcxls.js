@@ -2,6 +2,7 @@
 //Carga de Usuarios
 var btnAgregar = document.getElementById('btnAgregar'),
     btnUpdate = document.getElementById('btnUpdate');
+    btnCargaTblMes = document.getElementById('btnCargaMes');
 formulario = document.getElementById('formulario'),
     formCargaMes = document.getElementById('formularioCargaMes'),
     tabla = document.getElementById('tabla'),
@@ -17,9 +18,9 @@ var paginaActual = 1;
 formulario.addEventListener('submit', function (e) {
     AgregarInforme(e)
 });
-// formCargaMes.addEventListener('submit',function(e){
-//     cargarTablaMes(e);
-// });
+btnCargaTblMes.addEventListener('onclick',function(){
+    informesMesUsuario();
+});
 
 function AgregarInforme(e) {
     e.preventDefault();
@@ -107,11 +108,7 @@ function cargarTabla(page) {
         }
         //    console.log(datos);
         if (datos.idPerfil == 1) {
-            document.getElementById('liExcels').style.display = "block";
-            document.getElementById('liRegistro').style.display = "block";
-
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
-
             for (var i = (page - 1) * 10; i < (page * 10); i++) {
                 // for (var i = 0; i < datos.informes.length; i++) {
                 var fila = document.createElement('tr');
@@ -195,6 +192,30 @@ function cargarTabla(page) {
     }
     peticion.send();
 };
+
+function informesMesUsuario(){
+    var tblInformesUsuario = document.getElementById('tblCantidadxUser');
+    var peticionMes = new XMLHttpRequest();
+    peticionMes.open('GET','/informesMes');
+
+    peticionMes.onload = function (){
+        var datosInformeMes = JSON.parse(peticionMes.responseText);
+        tblInformesUsuario.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">CANTIDAD</th></tr></thead>';
+        for (var i = 0 ; i < datosInformeMes.length; i++){
+            var filatblMes = document.createElement('tr');
+            filatblMes.innerHTML += ("<td>" + datosInformeMes[i].ID_USUARIO + "</td>" );
+            filatblMes.innerHTML += ("<td>" + datosInformeMes[i].CANTIDAD + "</td>");
+            tblInformesUsuario.appendChild(filatblMes);
+        }
+        peticionMes.onreadystatechange = function(){
+            if(peticionMes.readyState == 4 && peticionMes.status == 200){
+
+            }
+        }
+    }
+    peticionMes.send();
+
+}
 
 // function cargarTablaMes(page) {
 //     var peticionMes = new XMLHttpRequest();

@@ -14,18 +14,20 @@
         <div id="formContent">
             <!-- Tabs Titles -->
             <h2 class="inactive underlineHover">Iniciar Sesion </h2>
-
-            <!-- Icon -->
-            <!-- <div class="fadeIn first">
-                <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
-            </div> -->
-
             <!-- Login Form -->
             <form action="{{ route('informes') }}" method="POST">
                 <input type="text" id="idusuario" class="fadeIn second" name="idusuario" placeholder="Ingresar Usuario">
-                <input type="password" id="password" class="fadeIn third" name="password" placeholder="Ingresar Contraseña">
+                <input type="password" id="password" class="fadeIn third" name="password"
+                    placeholder="Ingresar Contraseña">
                 <input type="submit" class="fadeIn fourth" id="btnIngresar" name="btnIngresar" value="Ingresar">
             </form>
+            <div class="row">
+                <div class="col-md-12">
+                    @if(session('avisoUser'))
+                    {{session('avisoUser')}}
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </body>

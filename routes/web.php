@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('login');
-});
+})->name('inicioSesion');
 
 Route::post('/informes',array(
     'as' => 'informes',
@@ -29,8 +29,7 @@ Route::post('/AgregarInforme','informeController@Agregar');
 Route::post('/EditarInforme','informeController@Actualizar');
 Route::post('/eliminar','informeController@Eliminar');
 Route::post('/agregarUsuario', 'usuarioController@AgregarUsuario');
-// Route::post('/listaInformesMes','nformeController@ListarxMes');
-
+Route::get('/informesMes','informeController@InformesUsuarioMes');
 
 Route::post('/descarga',array(
     'as' => 'descargaExcel',

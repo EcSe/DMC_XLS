@@ -28,8 +28,12 @@ h2 {
   color: #cccccc;
 }
 
-
-
+/* AVISO USUARIO */
+.contenedor{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* STRUCTURE */
 
 .wrapper {
