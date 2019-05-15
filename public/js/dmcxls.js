@@ -4,7 +4,6 @@ var btnAgregar = document.getElementById('btnAgregar'),
     btnUpdate = document.getElementById('btnUpdate');
     btnCargaTblMes = document.getElementById('btnCargaMes');
 formulario = document.getElementById('formulario'),
-    formCargaMes = document.getElementById('formularioCargaMes'),
     tabla = document.getElementById('tabla'),
     tablaUsuarios = document.getElementById('tablaConteoUsuarios');
 loader = document.getElementById('loader'),
@@ -17,9 +16,6 @@ var paginaActual = 1;
 
 formulario.addEventListener('submit', function (e) {
     AgregarInforme(e)
-});
-btnCargaTblMes.addEventListener('onclick',function(){
-    informesMesUsuario();
 });
 
 function AgregarInforme(e) {
@@ -106,18 +102,15 @@ function cargarTabla(page) {
         } else {
             btnSig.style.visibility = "visible";
         }
-        //    console.log(datos);
         if (datos.idPerfil == 1) {
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
             for (var i = (page - 1) * 10; i < (page * 10); i++) {
-                // for (var i = 0; i < datos.informes.length; i++) {
                 var fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
                 var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
-                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getUTCFullYear() + "</td>");
+                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getUTCFullYear() + "</td>");
 
-                // fila.innerHTML += ("<td>" + datos[i].DT_FECHA_CREACION + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_BANDEJA + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_REMITENTE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_ASUNTO + "</td>");
@@ -127,31 +120,8 @@ function cargarTabla(page) {
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_ID_USUARIO_CREACION + "</td>");
                 fila.innerHTML += ("<td><input type='button' value='U' onclick='EditarFila(this)'><input type='button' value='D' onclick='EliminarFila(this)'>");
                 tabla.appendChild(fila);
-                //}
             }
 
-            // var inputUserConsulta = document.getElementById('inUsuario');
-            // if( inputUserConsulta.value.trim().innerHTML =! ""){
-            //     tablaUsuarios.innerHTML = '<thead><tr><th scope="col">USUARIO</th><th scope="col">CANTIDAD</th></tr></thead>';
-            // var arrayInformes = datos.informes;
-            // function filter(arr, criteria) {
-            //     return arr.filter(function(obj) {
-            //       return Object.keys(criteria).every(function(c) {
-            //         return obj[c] == criteria[c];
-            //       });
-            //     });
-            //   }
-            // // for (var i = 0; i < datos.idUsuarios.length; i++) {
-                 
-            //     var newArray =filter(arrayInformes,{CH_ID_USUARIO_CREACION: "'"+inputUserConsulta.value+"'" })
-               
-            //     var filaUsuarios = document.createElement('tr');
-            //     filaUsuarios.innerHTML += ("<td>" + inputUserConsulta.value.trim()+ "</td>");
-            //     filaUsuarios.innerHTML += ("<td>" + newArray.length + "</td>");
-            //     tablaUsuarios.appendChild(filaUsuarios);
-            //     console.log(newArray);
-            //}
-            //}
             
 
 
@@ -162,7 +132,7 @@ function cargarTabla(page) {
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
                 var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
-                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getUTCFullYear() + "</td>");
+                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getUTCFullYear() + "</td>");
 
                 // fila.innerHTML += ("<td>" + datos[i].DT_FECHA_CREACION + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_BANDEJA + "</td>");
@@ -175,14 +145,6 @@ function cargarTabla(page) {
                 tabla.appendChild(fila);
             }
         }
-
-        // var array_data = datos.informes;
-        // var new_datos = array_data.filter(function (array_data) {
-        //     // var mes_data = new Date(array.DT_FECHA_CREACION);
-        //     return array_data.CH_ID_USUARIO_CREACION == 'ECSE';
-        // });
-        // // var new_datos = array_data.filter((array_data) => array_data.CH_ID_USUARIO_CREACION == 'ESALINAS');
-        // console.log(new_datos);
     }
     peticion.onreadystatechange = function () {
         if (peticion.readyState == 4 && peticion.status == 200) {
@@ -217,96 +179,43 @@ function informesMesUsuario(){
 
 }
 
-// function cargarTablaMes(page) {
-//     var peticionMes = new XMLHttpRequest();
-//     peticionMes.open('post', '/listaInformesMes');
-//     loader.style.display = 'block';
-
-//     valorMes = formCargaMes.pickMes.value.trim();
-//     var paramCargaListaMes = 'mesSeleccionado=' + valorMes;
-//     peticionMes.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//     peticionMes.onload = function () {
-//         var datosMes = JSON.parse(peticionMes.responseText);
-//         var nroPaginasMes = Math.ceil((datosMes.informesMensuales.length) / 10);
-
-//         //validando pagina 
-//         if (page < 1) page = 1;
-//         if (page > nroPaginasMes) page = nroPaginasMes;
-//         //Paginacion javascript
-//         var btnAnt = document.getElementById('btnAnterior');
-//         var btnSig = document.getElementById('btnSiguiente');
-//         spanPage.innerHTML = page;
-//         if (page == 1) {
-//             btnAnt.style.visibility = "hidden";
-//         } else {
-//             btnAnt.style.visibility = "visible"
-//         }
-//         if (page == nroPaginasMes) {
-//             btnSig.style.visibility = "hidden";
-//         } else {
-//             btnSig.style.visibility = "visible";
-//         }
-
-//         if (datos.idPerfil == 1) {
-//             document.getElementById('liExcels').style.display = "block";
-//             document.getElementById('liRegistro').style.display = "block";
-//             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></thead>';
-
-//             for (var i = (page - 1) * 10; i < (page * 10); i++) {
-//                 // for (var i = 0; i < datos.informes.length; i++) {
-//                 var fila = document.createElement('tr');
-//                 fila.innerHTML += ("<td  style='display:none;'>" + datosMes.informesMensuales[i].IN_ID_INFORME + "</td>");
-
-//                 var fecha = new Date(datosMes.informesMensuales[i].DT_FECHA_CREACION);
-//                 fila.innerHTML += ("<td>" + fecha.getDate() + '/' + fecha.getMonth() + '/' + fecha.getUTCFullYear() + "</td>");
-
-//                 // fila.innerHTML += ("<td>" + datos[i].DT_FECHA_CREACION + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].VC_BANDEJA + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].VC_REMITENTE + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].VC_ASUNTO + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].DT_FECHA_HORA + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].CH_COD_CLIENTE + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].VC_ESTADO + "</td>");
-//                 fila.innerHTML += ("<td>" + datosMes.informesMensuales[i].CH_ID_USUARIO_CREACION + "</td>");
-//                 fila.innerHTML += ("<td><input type='button' value='U' onclick='EditarFila(this)'><input type='button' value='D' onclick='EliminarFila(this)'>");
-//                 tabla.appendChild(fila);
-//                 //}
-//             }
-
-
-//         }
-
-//     }
-//     peticionMes.onreadystatechange = function () {
-//         if (peticionMes.readyState == 4 && peticionMes.status == 200) {
-//             loader.style.display = "none";
-//         }
-//     }
-
-//     peticionMes.send(paramCargaListaMes);
-
-// }
-
 function EditarFila(e) {
     var idInforme = e.parentNode.parentElement.cells[0].innerHTML,
-        //fechayhora
         bandeja_up = e.parentNode.parentElement.cells[2].innerHTML,
         remitente_up = e.parentNode.parentElement.cells[3].innerHTML,
         asunto_up = e.parentNode.parentElement.cells[4].innerHTML,
+        fechaHora_up = e.parentNode.parentElement.cells[5].innerHTML,
         cod_cliente_up = e.parentNode.parentElement.cells[6].innerHTML,
         estado_up = e.parentNode.parentElement.cells[7].innerHTML;
+
+    //Obteniendo Fechas y Horas para actualizacion
+    var fechaUp = new Date(fechaHora_up),
+        dia = fechaUp.getDate(),
+        mes = fechaUp.getMonth() + 1,
+        Year = fechaUp.getFullYear(),
+        hora = fechaUp.getHours(),
+        minutos = fechaUp.getMinutes();
+
+        dia<10 ? dia = ("0" + dia).slice(-2) : dia;
+        mes<10 ? mes = ('0' + mes).slice(-2) :mes;
+        hora<10 ? hora = ('0' + hora).slice(-2) : hora;
+        minutos<10 ? minutos = ('0' + minutos).slice(-2) : minutos;
+
+        fechaEdit = Year+'-'+mes+'-'+dia;
+        horaEdit = hora + ':' + minutos; 
 
     formulario.inputinforme.value = idInforme;
     formulario.bandeja.value = bandeja_up;
     formulario.remitente.value = remitente_up;
     formulario.asunto.value = asunto_up;
-    // formulario.fecha.value = cargaFecha;
-    // formulario.hora.value = cargaHora;
+    formulario.fecha.value = fechaEdit;
+    formulario.hora.value = horaEdit;
     formulario.cod_cliente.value = cod_cliente_up;
     formulario.estado.value = estado_up;
 
     document.getElementById('btnAgregar').style.display = "none";
     document.getElementById('btnUpdate').style.display = "block";
+    document.getElementById('btnCancelar').style.display = 'block';
     document.getElementById('cod_cliente').disabled = true;
 }
 
@@ -345,6 +254,7 @@ function EditarInforme() {
             loader.style.display = "none";
             document.getElementById('btnAgregar').style.display = "block";
             document.getElementById('btnUpdate').style.display = "none";
+            document.getElementById('btnCancelar').style.display = 'none';
             document.getElementById('cod_cliente').disabled = false;
 
         }
@@ -433,4 +343,18 @@ function BuscarCliente() {
             }
         }
     }
+}
+
+function cancelUpdate(){
+    formulario.remitente.value = "";
+    formulario.fecha.value = "";
+    formulario.hora.value = "";
+    formulario.cod_cliente.value = "";
+    formulario.bandeja.selectedIndex = 0;
+    formulario.estado.selectedIndex = 0;
+    formulario.asunto.value = "";
+    document.getElementById('btnAgregar').style.display = "block";
+    document.getElementById('btnUpdate').style.display = "none";
+    document.getElementById('btnCancelar').style.display = 'none';
+    document.getElementById('cod_cliente').disabled = false;
 }

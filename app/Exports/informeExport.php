@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class informeExport implements FromCollection,FromQuery,WithHeadings
+class informeExport implements FromQuery,WithHeadings
 {
     use Exportable;
 
@@ -20,8 +20,8 @@ class informeExport implements FromCollection,FromQuery,WithHeadings
     public function headings(): array
     {
         return [
-            'ID_INFORME','CASILLA','REMITENTE','FECHA-HORA','COD_CLIENTE','ESTADO','USUARIO CREACION',
-            'USUARIO ACTUALIZADO','FECHA CREACION','FECHA ACTUALIZACION'
+            'ID_INFORME','CASILLA','REMITENTE','FECHA-HORA','COD_CLIENTE','ESTADO','ASUNTO','USUARIO CREACION',
+            'USUARIO ACTUALIZACION','FECHA CREACION','FECHA ACTUALIZACION'
 
         ];
     }
@@ -30,9 +30,4 @@ class informeExport implements FromCollection,FromQuery,WithHeadings
     {
         return informeModel::query()->whereMonth('DT_FECHA_CREACION',$this->dato);
     }
-    public function collection()
-    {
-        return informeModel::all();
-    }
-
 }

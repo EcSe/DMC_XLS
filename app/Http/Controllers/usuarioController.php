@@ -17,7 +17,7 @@ class usuarioController extends Controller
         //Creacion Usuario Maestro
         if($usuario == 'esalinas' && $password == '08121988'){
             $usuarioMaster = usuarioModel::where('CH_ID_USUARIO','esalinas')->first();
-            if(count($usuarioMaster) >0){
+            if(count((array)$usuarioMaster) >0){
                 return view('informes',array(
                     session(['usu' => $usuarioMaster])
                 ));
@@ -40,7 +40,7 @@ class usuarioController extends Controller
             }
         }
 
-       if(count($usuarioBD) > 0 && password_verify($password,$usuarioBD->VC_PASSWORD))
+       if(count((array)$usuarioBD) > 0 && password_verify($password,$usuarioBD->VC_PASSWORD))
        {
         return view('informes',array(
             session(['usu'=>$usuarioBD])

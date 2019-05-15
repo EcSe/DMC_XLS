@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-md-12 form-group" style="display: inline-flex">
                                 <div class="col col-md-4 ">
-                                    <select name="bandeja" id="bandeja" class="custom-select">
+                                    <select name="bandeja" id="bandeja" class="custom-select" required>
                                         <option value="" selected disabled>--Elegir Bandeja--</option>
                                         <option value="CNT">CNT</option>
                                         <option value="EMISION RAPIDA">EMISION RAPIDA</option>
@@ -55,7 +55,7 @@
                                     </select>
                                 </div>
                                 <div class="col col-md-4">
-                                    <select name="estado" id="estado" class="custom-select">
+                                    <select name="estado" id="estado" class="custom-select" required>
                                         <option value="" selected disabled>--Elegir Estado--</option>
                                         <option value="ACTUALIZACION">ACTUALIZACION</option>
                                         <option value="NUEVO INGRESO">NUEVO INGRESO</option>
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col col-md-4">
                                     <span style="float:left">Escoger Fecha &nbsp;: </span>
-                                    <input type="date" id="fecha" name="fecha" required style="float: right;">
+                                    <input type="date" id="fecha" name="fecha" required style="float: right;" required>
                                 </div>
                                 <div class="col col-md-4">
                                     <span style="float:left">Escoger Hora&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -101,49 +101,23 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
-                                <button type="submit" id="btnAgregar" class="btn btn-success">Agregar</button>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" id="btnUpdate" onclick="EditarInforme()" style="display:none"
-                                    class="btn btn-success">Actualizar</button>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group" style="float: right;margin-right: 50px;">
+                            <div class="col-md-12 form-group" style="display: inline-flex;">
+                                <div class="col-md-4">
+                                    <button type="submit" id="btnAgregar" class="btn btn-success">Agregar</button>
+                                </div>
+                                <div class="col-md-4" style="display: inline-flex;">
+                                    <button type="button" id="btnUpdate" onclick="EditarInforme()"
+                                        style="display:none; float:left;" class="btn btn-success">Actualizar</button>
+                                    <button type="button" id="btnCancelar" onclick="cancelUpdate()"
+                                        style="display:none;float: right;" class="btn btn-danger">Cancelar</button>
+                                </div>
+                                <div class="col-md-4">
                                     <label>Nro Registros</label>
                                     <input type="text" id="nroregistros" name="nroregistros" readonly>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <div class="container-fluid">
-                        <form action="" method="" id="formularioCargaMes">
-                            <!-- <div class="row">
-                                <div class="col-12 col-md-6 form-group">
-                                    <div class="col-6 col-md-3" style="display:inline;float: left;">
-                                        <select name="pickMes" id="pickMes">
-                                            <option value="0" selected disabled>--Elegir Mes--</option>
-                                            <option value="01">Enero</option>
-                                            <option value="02">Febrero</option>
-                                            <option value="03">Marzo</option>
-                                            <option value="04">Abril</option>
-                                            <option value="05">Mayo</option>
-                                            <option value="06">Junio</option>
-                                            <option value="07">Julio</option>
-                                            <option value="08">Agosto</option>
-                                            <option value="09">Setiembre</option>
-                                            <option value="10">Octubre</option>
-                                            <option value="11">Noviembre</option>
-                                            <option value="12">Diciembre</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6 col-md-3" style="display:inline;float:right;">
-                                        <input type="submit" value="Cargar">
-                                    </div>
-                                </div>
-                            </div> -->
-                        </form>
-                    </div>
                     <div class="row">
                         <div class="col-md-12" id="listarTabla">
                             <table id="tabla">
@@ -174,39 +148,40 @@
                 <div class="container-fluid">
                     <form action="{{ route('descargaExcel') }}" method="POST" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-md-4">
-                                <p>Seleccionar Mes</p>
-                            </div>
-                            <div class="col-md-4">
-                                <select name="mesInforme" id="mesInforme">
-                                    <option value="01">Enero</option>
-                                    <option value="02">Febrero</option>
-                                    <option value="03">Marzo</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Mayo</option>
-                                    <option value="06">Junio</option>
-                                    <option value="07">Julio</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
+                            <div class="col-md-12 form-group" style="display: inline-flex;">
+                                <div class="col-md-4">
+                                    <select name="mesInforme" id="mesInforme" class="custom-select">
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Descargar Excel</button>
+                                </div>
                             </div>
                         </div>
-                        <button type="submit">Descargar Excel</button>
                     </form>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <input type="button" name="btnCargaMes" id="btnCargaMes" onclick="informesMesUsuario(this)"
-                            value="Cargar Tabla" style="display: block;margin:auto">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <input type="button" name="btnCargaMes" id="btnCargaMes" onclick="informesMesUsuario(this)"
+                                value="Cargar Tabla" style="display: block;margin:auto" class="btn btn-success">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="tblCantidadxUser">
-                        </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="tblCantidadxUser">
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

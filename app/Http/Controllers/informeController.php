@@ -56,7 +56,7 @@ class informeController extends Controller
     {
         $id = $_POST['idInforme'];
         $informe = informeModel::where('IN_ID_INFORME',$id)->first();
-        if(count($informe) != 0)
+        if(count((array)$informe) != 0)
         {
             $informe->delete();
             $mensaje = "El Usuario ha sido eliminado correctamente";
@@ -110,6 +110,6 @@ class informeController extends Controller
     {
         //$mes = $_POST['mesDescarga'];
         $mes = $request->input('mesInforme');
-        return (new informeExport($mes))->download('invoices.xlsx');    
+        return (new informeExport($mes))->download('ProduccionMes'.$mes.'.xlsx'); 
     }
 }
