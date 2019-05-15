@@ -30,7 +30,7 @@ function AgregarInforme(e) {
     cargaHora = formulario.hora.value.trim();
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
-    cargaAsunto = formulario.asunto.value.trim();
+    cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
 
     var parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto;
@@ -104,7 +104,7 @@ function cargarTabla(page) {
         }
         if (datos.idPerfil == 1) {
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
-            for (var i = (page - 1) * 10; i < (page * 10); i++) {
+            for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
@@ -127,7 +127,7 @@ function cargarTabla(page) {
 
         } else {
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
-            for (var i = (page - 1) * 10; i < (page * 10); i++) {
+            for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
@@ -207,7 +207,7 @@ function EditarFila(e) {
     formulario.inputinforme.value = idInforme;
     formulario.bandeja.value = bandeja_up;
     formulario.remitente.value = remitente_up;
-    formulario.asunto.value = asunto_up;
+    formulario.asunto.value = (asunto_up).replace(/&amp;/g, "&");
     formulario.fecha.value = fechaEdit;
     formulario.hora.value = horaEdit;
     formulario.cod_cliente.value = cod_cliente_up;
@@ -233,7 +233,7 @@ function EditarInforme() {
     cargaHora = formulario.hora.value.trim();
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
-    cargaAsunto = formulario.asunto.value.trim();
+    cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
 
     var parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto;
