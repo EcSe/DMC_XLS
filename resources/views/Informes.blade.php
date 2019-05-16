@@ -72,7 +72,7 @@
                             <div class="col-md-12 form-group" style="display:inline-flex">
                                 <div class="col col-md-4">
                                     <input type="text" id="cod_cliente" name="cod_cliente"
-                                        placeholder="Ingrese Cod Cliente" required>
+                                        placeholder="Ingrese Cod Cliente" maxlength="14" required>
                                 </div>
                                 <div class="col col-md-4">
                                     <span style="float:left">Escoger Fecha &nbsp;: </span>

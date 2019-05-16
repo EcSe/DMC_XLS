@@ -87,14 +87,24 @@ class informeController extends Controller
         }
         else{
             $fecha_actual = now();
+            $dia_actual = date('d',strtotime($fecha_actual));
             $mes_actual = date('m',strtotime($fecha_actual));
+            $ano_actual = date('Y',strtotime($fecha_actual));
             $informes = DB::table('INFORME')->where('CH_ID_USUARIO_CREACION','=',$usuario->CH_ID_USUARIO)
                                             ->whereMonth('DT_FECHA_CREACION',$mes_actual)
+                                            ->whereYear('DT_FECHA_CREACION',$ano_actual)
                                             ->orderBy('DT_FECHA_CREACION','desc')
                                             ->get();
+            $informesDia = DB::table('INFORME')->where('CH_ID_USUARIO_CREACION','=',$usuario->CH_ID_USUARIO)
+                                                ->whereDay('DT_FECHA_CREACION',$dia_actual)
+                                                ->whereMonth('DT_FECHA_CREACION',$mes_actual)
+                                                ->whereYear('DT_FECHA_CREACION',$ano_actual)
+                                                ->get()->count();
+            //$conteoInformes = $informesDia->count();
         return response()->json([
             'informes' => $informes,
-            'idPerfil' => $usuario->IN_ID_PERFIL
+            'idPerfil' => $usuario->IN_ID_PERFIL,
+            'cantInformesDia' => $informesDia
             ]);
         }   
       

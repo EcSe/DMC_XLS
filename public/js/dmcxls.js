@@ -79,7 +79,7 @@ function cargarTabla(page) {
 
     peticion.onload = function () {
         var datos = JSON.parse(peticion.responseText);
-        document.getElementById('nroregistros').value = datos.informes.length;
+        //document.getElementById('nroregistros').value = datos.informes.length;
         //Paginacion en Javascript
         var nroPaginas = Math.ceil((datos.informes.length) / 10);
 
@@ -103,6 +103,7 @@ function cargarTabla(page) {
             btnSig.style.visibility = "visible";
         }
         if (datos.idPerfil == 1) {
+            document.getElementById('nroregistros').value = datos.informes.length;
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
             for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
@@ -126,6 +127,7 @@ function cargarTabla(page) {
 
 
         } else {
+            document.getElementById('nroregistros').value = datos.informes.length+' totales y ' + datos.cantInformesDia +' hoy';
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
             for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
