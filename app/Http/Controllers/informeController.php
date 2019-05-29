@@ -76,9 +76,15 @@ class informeController extends Controller
         $id_usuarios = DB::table('USUARIO')->select('CH_ID_USUARIO')
                                             // ->where('IN_ID_PERFIL',2)
                                             ->get();
+        $fecha_actual = now();
+        $dia_actual = date('d',strtotime($fecha_actual));
+        $mes_actual = date('m',strtotime($fecha_actual));
+        $ano_actual = date('Y',strtotime($fecha_actual));
         if($usuario->IN_ID_PERFIL == 1)
         {
-            $informes = DB::table('INFORME')->orderBy('DT_FECHA_CREACION','desc')->get();
+            $informes = DB::table('INFORME')->whereMonth('DT_FECHA_CREACION',$mes_actual)
+                                            ->whereYear('DT_FECHA_CREACION',$ano_actual)
+                                            ->orderBy('DT_FECHA_CREACION','desc')->get();
             return response()->json([
                 'informes' => $informes,
                 'idPerfil' => $usuario->IN_ID_PERFIL,
@@ -86,10 +92,7 @@ class informeController extends Controller
                 ]);
         }
         else{
-            $fecha_actual = now();
-            $dia_actual = date('d',strtotime($fecha_actual));
-            $mes_actual = date('m',strtotime($fecha_actual));
-            $ano_actual = date('Y',strtotime($fecha_actual));
+          
             $informes = DB::table('INFORME')->where('CH_ID_USUARIO_CREACION','=',$usuario->CH_ID_USUARIO)
                                             ->whereMonth('DT_FECHA_CREACION',$mes_actual)
                                             ->whereYear('DT_FECHA_CREACION',$ano_actual)
@@ -113,7 +116,11 @@ class informeController extends Controller
     public function InformesUsuarioMes()
     {
        $datosMes = DB::select('CALL USP_REGISTROS_MES');
-       return response()->json($datosMes);
+       $datosEstadoMes = DB::select('CALL USP_REGISTROS_ESTADO_MES');
+       return response()->json([
+           'datosMes' => $datosMes,
+           'datosEstado' => $datosEstadoMes
+       ]);
     }
 
     public function exportInforme(Request $request)

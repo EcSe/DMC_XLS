@@ -1,12 +1,11 @@
 
 //Carga de Usuarios
 var btnAgregar = document.getElementById('btnAgregar'),
-    btnUpdate = document.getElementById('btnUpdate');
-    btnCargaTblMes = document.getElementById('btnCargaMes');
-formulario = document.getElementById('formulario'),
+    btnUpdate = document.getElementById('btnUpdate'),
+    btnCargaTblMes = document.getElementById('btnCargaMes'),
+    formulario = document.getElementById('formulario'),
     tabla = document.getElementById('tabla'),
-    tablaUsuarios = document.getElementById('tablaConteoUsuarios');
-loader = document.getElementById('loader'),
+    loader = document.getElementById('loader'),
     frmUsuario = document.getElementById('formUsuario');
 
 var cargaBandeja, cargaRemitente, cargaFecha, cargaHora,
@@ -37,19 +36,26 @@ function AgregarInforme(e) {
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = function () {
-        cargarTabla(1);
-        formulario.remitente.value = "";
-        formulario.fecha.value = "";
-        formulario.hora.value = "";
-        formulario.cod_cliente.value = "";
-        formulario.bandeja.selectedIndex = 0;
-        formulario.estado.selectedIndex = 0;
-        formulario.asunto.value = "";
+
     }
 
     peticion.onreadystatechange = function () {
         if (peticion.readyState == 4 && peticion.status == 200) {
+            divMensaje.style.display = "none";
+            cargarTabla(1);
+            formulario.remitente.value = "";
+            formulario.fecha.value = "";
+            formulario.hora.value = "";
+            formulario.cod_cliente.value = "";
+            formulario.bandeja.selectedIndex = 0;
+            formulario.estado.selectedIndex = 0;
+            formulario.asunto.value = "";
             loader.style.display = "none";
+
+        } else if(peticion.readyState != 4 && peticion.status != 200){
+            divMensaje.innerHTML = 'Ha ocurrido un problema vuelva a intentarlo';
+            divMensaje.style.backgroundColor = "red"
+            divMensaje.style.display = "block";
         }
     }
 
@@ -110,7 +116,7 @@ function cargarTabla(page) {
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
                 var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
-                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getUTCFullYear() + "</td>");
+                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
 
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_BANDEJA + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_REMITENTE + "</td>");
@@ -123,18 +129,18 @@ function cargarTabla(page) {
                 tabla.appendChild(fila);
             }
 
-            
+
 
 
         } else {
-            document.getElementById('nroregistros').value = datos.informes.length+' totales y ' + datos.cantInformesDia +' hoy';
+            document.getElementById('nroregistros').value = datos.informes.length + ' totales y ' + datos.cantInformesDia + ' hoy';
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
             for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
                 var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
-                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getUTCFullYear() + "</td>");
+                fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
 
                 // fila.innerHTML += ("<td>" + datos[i].DT_FECHA_CREACION + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_BANDEJA + "</td>");
@@ -157,24 +163,34 @@ function cargarTabla(page) {
     peticion.send();
 };
 
-function informesMesUsuario(){
-    var tblInformesUsuario = document.getElementById('tblCantidadxUser');
+function informesMesUsuario() {
+    var tblInformesUsuario = document.getElementById('tblCantidadxUser'),
+        tblConteoEstado = document.getElementById('tblCantidadxEstado');
     var peticionMes = new XMLHttpRequest();
-    peticionMes.open('GET','/informesMes');
+    peticionMes.open('GET', '/informesMes');
 
-    peticionMes.onload = function (){
+    peticionMes.onload = function () {
         var datosInformeMes = JSON.parse(peticionMes.responseText);
         tblInformesUsuario.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">CANTIDAD</th></tr></thead>';
-        for (var i = 0 ; i < datosInformeMes.length; i++){
+        for (var i = 0; i < datosInformeMes.datosMes.length; i++) {
             var filatblMes = document.createElement('tr');
-            filatblMes.innerHTML += ("<td>" + datosInformeMes[i].ID_USUARIO + "</td>" );
-            filatblMes.innerHTML += ("<td>" + datosInformeMes[i].CANTIDAD + "</td>");
+            filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].ID_USUARIO + "</td>");
+            filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].CANTIDAD + "</td>");
             tblInformesUsuario.appendChild(filatblMes);
         }
-        peticionMes.onreadystatechange = function(){
-            if(peticionMes.readyState == 4 && peticionMes.status == 200){
+        tblConteoEstado.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">ESTADO</th><th>CANTIDAD</th></tr></thead>';
+        for (var j = 0; j < datosInformeMes.datosEstado.length; j++) {
+            var filatblConteo = document.createElement('tr');
+            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CH_ID_USUARIO_CREACION + "</td>");
+            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].VC_ESTADO + "</td>")
+            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+            tblConteoEstado.appendChild(filatblConteo);
+        }
+    };
 
-            }
+    peticionMes.onreadystatechange = function () {
+        if (peticionMes.readyState == 4 && peticionMes.status == 200) {
+
         }
     }
     peticionMes.send();
@@ -198,13 +214,13 @@ function EditarFila(e) {
         hora = fechaUp.getHours(),
         minutos = fechaUp.getMinutes();
 
-        dia<10 ? dia = ("0" + dia).slice(-2) : dia;
-        mes<10 ? mes = ('0' + mes).slice(-2) :mes;
-        hora<10 ? hora = ('0' + hora).slice(-2) : hora;
-        minutos<10 ? minutos = ('0' + minutos).slice(-2) : minutos;
+    dia < 10 ? dia = ("0" + dia).slice(-2) : dia;
+    mes < 10 ? mes = ('0' + mes).slice(-2) : mes;
+    hora < 10 ? hora = ('0' + hora).slice(-2) : hora;
+    minutos < 10 ? minutos = ('0' + minutos).slice(-2) : minutos;
 
-        fechaEdit = Year+'-'+mes+'-'+dia;
-        horaEdit = hora + ':' + minutos; 
+    fechaEdit = Year + '-' + mes + '-' + dia;
+    horaEdit = hora + ':' + minutos;
 
     formulario.inputinforme.value = idInforme;
     formulario.bandeja.value = bandeja_up;
@@ -347,7 +363,7 @@ function BuscarCliente() {
     }
 }
 
-function cancelUpdate(){
+function cancelUpdate() {
     formulario.remitente.value = "";
     formulario.fecha.value = "";
     formulario.hora.value = "";

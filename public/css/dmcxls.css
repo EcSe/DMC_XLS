@@ -10,6 +10,18 @@ button{
   margin: 5px;
 }
 
+.divMensaje{
+  display: none;
+  border: 1px solid gray;
+  text-align: center;
+  background-color: red;
+  color: white;
+  font-size: 15px;
+  margin-right: 30px;
+  margin-left: 30px;
+  margin-top: 5px;  
+  margin-bottom: 10px;
+}
 .pag{
   text-decoration: none;
   display: inline-block;

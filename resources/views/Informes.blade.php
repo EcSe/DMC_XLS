@@ -38,6 +38,9 @@
                 </div>
                 <div class="container-fluid">
                     <form action="" method="POST" id="formulario">
+                        <div class="divMensaje" id="divMensaje">
+                            <p></p>
+                        </div>
                         <input type="hidden" id="inputinforme" name="inputinforme">
                         <div class="row">
                             <div class="col-md-12 form-group" style="display: inline-flex">
@@ -60,6 +63,7 @@
                                         <option value="ACTUALIZACION">ACTUALIZACION</option>
                                         <option value="NUEVO INGRESO">NUEVO INGRESO</option>
                                         <option value="DEVUELTO">DEVUELTO</option>
+                                        <option value="VERIFICADO">VERIFICADO</option>
                                     </select>
                                 </div>
                                 <div class="col col-md-4">
@@ -178,9 +182,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 form-group">
                             <table id="tblCantidadxUser">
                             </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <table id="tblCantidadxEstado"></table>
                         </div>
                     </div>
                 </div>
