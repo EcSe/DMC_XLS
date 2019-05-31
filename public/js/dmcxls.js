@@ -178,12 +178,27 @@ function informesMesUsuario() {
             filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].CANTIDAD + "</td>");
             tblInformesUsuario.appendChild(filatblMes);
         }
-        tblConteoEstado.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">ESTADO</th><th>CANTIDAD</th></tr></thead>';
+        tblConteoEstado.innerHTML = '<thead><tr><th></th><th scope="col">ACTUALIZACION</th><th scope="col">DEVUELTO</th><th>NUEVO INGRESO</th><th scope="col">VERIFICADO</th></tr></thead>';
         for (var j = 0; j < datosInformeMes.datosEstado.length; j++) {
             var filatblConteo = document.createElement('tr');
             filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CH_ID_USUARIO_CREACION + "</td>");
-            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].VC_ESTADO + "</td>")
-            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+
+            if(datosInformeMes.datosEstado[j].VC_ESTADO == 'ACTUALIZACION'){ 
+                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+            }else if(datosInformeMes.datosEstado[j].VC_ESTADO == 'DEVUELTO'){
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+            }else if(datosInformeMes.datosEstado[j].VC_ESTADO == 'NUEVO INGRESO'){
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+            }else if (datosInformeMes.datosEstado[j].VC_ESTADO == 'VERIFICADO'){
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td></td>");
+                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
+            
+            }
             tblConteoEstado.appendChild(filatblConteo);
         }
     };
