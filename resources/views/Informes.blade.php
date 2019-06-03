@@ -58,7 +58,7 @@
                                     </select>
                                 </div>
                                 <div class="col col-md-4">
-                                    <select name="estado" id="estado" class="custom-select" required>
+                                    <select name="estado" id="estado" class="custom-select" onchange="chkOpciones()" required>
                                         <option value="" selected disabled>--Elegir Estado--</option>
                                         <option value="ACTUALIZACION">ACTUALIZACION</option>
                                         <option value="NUEVO INGRESO">NUEVO INGRESO</option>
@@ -85,6 +85,30 @@
                                 <div class="col col-md-4">
                                     <span style="float:left">Escoger Hora&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <input type="time" name="hora" id="hora" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="chkControles" style="display: none;">
+                            <div class="col-md-12 form-group" style="display: inline-flex">
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkBandeja" value=" Bandeja">
+                                    <label for="chkBandeja">Bandeja</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkRemitente" value=" Remitente">
+                                    <label for="chkRemitente">Remitente</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkFechaHora" value=" fechaHora">
+                                    <label for="chkFechaHora">FechaHora</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkCodCliente" value=" CodigoCliente">
+                                    <label for="chkCodCliente">Codigo Cliente</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkEstado" value=" Estado">
+                                    <label for="chkEstado">Estado</label>
                                 </div>
                             </div>
                         </div>

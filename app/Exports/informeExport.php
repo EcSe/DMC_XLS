@@ -20,7 +20,7 @@ class informeExport implements FromQuery,WithHeadings
     public function headings(): array
     {
         return [
-            'ID_INFORME','CASILLA','REMITENTE','FECHA-HORA','COD_CLIENTE','ESTADO','ASUNTO','USUARIO CREACION',
+            'ID_INFORME','CASILLA','REMITENTE','FECHA-HORA','COD_CLIENTE','ESTADO','ASUNTO','EDITADOS','USUARIO CREACION',
             'USUARIO ACTUALIZACION','FECHA CREACION','FECHA ACTUALIZACION'
 
         ];

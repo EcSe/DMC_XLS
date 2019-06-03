@@ -6,7 +6,8 @@ var btnAgregar = document.getElementById('btnAgregar'),
     formulario = document.getElementById('formulario'),
     tabla = document.getElementById('tabla'),
     loader = document.getElementById('loader'),
-    frmUsuario = document.getElementById('formUsuario');
+    frmUsuario = document.getElementById('formUsuario'),
+    divControles = document.getElementById('chkControles');
 
 var cargaBandeja, cargaRemitente, cargaFecha, cargaHora,
     cargaCliente, cargaEstado, cargaAsunto;
@@ -23,6 +24,13 @@ function AgregarInforme(e) {
     peticion.open('POST', '/AgregarInforme');
     loader.style.display = 'block';
 
+    //Comprobando checkbox
+    formulario.chkBandeja.checked ? chkBandejaVal = formulario.chkBandeja.value : chkBandejaVal = '';
+    formulario.chkRemitente.checked ? chkRemitenteVal = formulario.chkRemitente.value : chkRemitenteVal = '';
+    formulario.chkFechaHora.checked ? chkFechaHoraVal = formulario.chkFechaHora.value : chkFechaHoraVal = '';
+    formulario.chkCodCliente.checked ? chkCodClienteVal = formulario.chkCodCliente.value : chkCodClienteVal = '';
+    formulario.chkEstado.checked ? chkEstadoVal = formulario.chkEstado.value : chkEstadoVal = '';
+
     cargaBandeja = formulario.bandeja.value.trim();
     cargaRemitente = formulario.remitente.value.trim();
     cargaFecha = formulario.fecha.value.trim();
@@ -30,9 +38,12 @@ function AgregarInforme(e) {
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
+    cargaEditados = chkBandejaVal.concat(chkRemitenteVal, chkFechaHoraVal, chkCodClienteVal, chkEstadoVal);
+
 
     var parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
-        '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto;
+        '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
+        '&editados=' + cargaEditados;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = function () {
@@ -51,8 +62,14 @@ function AgregarInforme(e) {
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
             loader.style.display = "none";
+            divControles.style.display = "none";
+            formulario.chkBandeja.checked = false;
+            formulario.chkRemitente.checked = false;
+            formulario.chkFechaHora.checked = false;
+            formulario.chkCodCliente.checked = false;
+            formulario.chkEstado.checked = false;
 
-        } else if(peticion.readyState != 4 && peticion.status != 200){
+        } else if (peticion.readyState != 4 && peticion.status != 200) {
             divMensaje.innerHTML = 'Ha ocurrido un problema vuelva a intentarlo';
             divMensaje.style.backgroundColor = "red"
             divMensaje.style.display = "block";
@@ -114,6 +131,7 @@ function cargarTabla(page) {
             for (var i = (page - 1) * 100; i < (page * 100); i++) {
                 var fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
+                fila.innerHTML += ("<td style='display:none;'>" + datos.informes[i].VC_EDITADOS + "</td>");
 
                 var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
                 fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
@@ -178,27 +196,12 @@ function informesMesUsuario() {
             filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].CANTIDAD + "</td>");
             tblInformesUsuario.appendChild(filatblMes);
         }
-        tblConteoEstado.innerHTML = '<thead><tr><th></th><th scope="col">ACTUALIZACION</th><th scope="col">DEVUELTO</th><th>NUEVO INGRESO</th><th scope="col">VERIFICADO</th></tr></thead>';
+        tblConteoEstado.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">ESTADO</th><th>CANTIDAD</th></tr></thead>';
         for (var j = 0; j < datosInformeMes.datosEstado.length; j++) {
             var filatblConteo = document.createElement('tr');
             filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CH_ID_USUARIO_CREACION + "</td>");
-
-            if(datosInformeMes.datosEstado[j].VC_ESTADO == 'ACTUALIZACION'){ 
-                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
-            }else if(datosInformeMes.datosEstado[j].VC_ESTADO == 'DEVUELTO'){
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
-            }else if(datosInformeMes.datosEstado[j].VC_ESTADO == 'NUEVO INGRESO'){
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
-            }else if (datosInformeMes.datosEstado[j].VC_ESTADO == 'VERIFICADO'){
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td></td>");
-                filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
-            
-            }
+            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].VC_ESTADO + "</td>")
+            filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
             tblConteoEstado.appendChild(filatblConteo);
         }
     };
@@ -214,12 +217,30 @@ function informesMesUsuario() {
 
 function EditarFila(e) {
     var idInforme = e.parentNode.parentElement.cells[0].innerHTML,
-        bandeja_up = e.parentNode.parentElement.cells[2].innerHTML,
-        remitente_up = e.parentNode.parentElement.cells[3].innerHTML,
-        asunto_up = e.parentNode.parentElement.cells[4].innerHTML,
-        fechaHora_up = e.parentNode.parentElement.cells[5].innerHTML,
-        cod_cliente_up = e.parentNode.parentElement.cells[6].innerHTML,
-        estado_up = e.parentNode.parentElement.cells[7].innerHTML;
+        editados_up = e.parentNode.parentElement.cells[1].innerHTML,
+        bandeja_up = e.parentNode.parentElement.cells[3].innerHTML,
+        remitente_up = e.parentNode.parentElement.cells[4].innerHTML,
+        asunto_up = e.parentNode.parentElement.cells[5].innerHTML,
+        fechaHora_up = e.parentNode.parentElement.cells[6].innerHTML,
+        cod_cliente_up = e.parentNode.parentElement.cells[7].innerHTML,
+        estado_up = e.parentNode.parentElement.cells[8].innerHTML;
+
+    //Llenando los checkbox para actualizar
+    if (estado_up == 'ACTUALIZACION' || estado_up == 'DEVUELTO') {
+        divControles.style.display = 'block'
+
+        var arrayEditados = editados_up.split(" ");
+        var indexBandeja = arrayEditados.indexOf('Bandeja');
+        indexBandeja >= 0 ? document.getElementById('chkBandeja').checked = true : document.getElementById('chkBandeja').checked = false;
+        var indexRemitente = arrayEditados.indexOf('Remitente');
+        indexRemitente >= 0 ? document.getElementById('chkRemitente').checked = true : document.getElementById('chkRemitente').checked = false;
+        var indexFechaHora = arrayEditados.indexOf('fechaHora');
+        indexFechaHora >= 0 ? document.getElementById('chkFechaHora').checked = true : document.getElementById('chkFechaHora').checked = false;
+        var indexCodigoCliente = arrayEditados.indexOf('CodigoCliente');
+        indexCodigoCliente >= 0 ? document.getElementById('chkCodCliente').checked = true : document.getElementById('chkCodCliente').checked = false;
+        var indexEstado = arrayEditados.indexOf('Estado');
+        indexEstado >= 0 ? document.getElementById('chkEstado').checked = true : document.getElementById('chkEstado').checked = false;
+    }
 
     //Obteniendo Fechas y Horas para actualizacion
     var fechaUp = new Date(fechaHora_up),
@@ -259,6 +280,13 @@ function EditarInforme() {
     var peticion = new XMLHttpRequest();
     peticion.open('POST', '/EditarInforme');
 
+    //Valorando checkbox
+    formulario.chkBandeja.checked ? chkBandejaVal = formulario.chkBandeja.value : chkBandejaVal = '';
+    formulario.chkRemitente.checked ? chkRemitenteVal = formulario.chkRemitente.value : chkRemitenteVal = '';
+    formulario.chkFechaHora.checked ? chkFechaHoraVal = formulario.chkFechaHora.value : chkFechaHoraVal = '';
+    formulario.chkCodCliente.checked ? chkCodClienteVal = formulario.chkCodCliente.value : chkCodClienteVal = '';
+    formulario.chkEstado.checked ? chkEstadoVal = formulario.chkEstado.value : chkEstadoVal = '';
+
     idInforme = formulario.inputinforme.value.trim();
     cargaBandeja = formulario.bandeja.value.trim();
     cargaRemitente = formulario.remitente.value.trim();
@@ -267,34 +295,48 @@ function EditarInforme() {
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
+    cargaEditados = chkBandejaVal.concat(chkRemitenteVal, chkFechaHoraVal, chkCodClienteVal, chkEstadoVal);
 
     var parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
-        '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto;
+        '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
+        '&editados=' + cargaEditados;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = function () {
-        cargarTabla(1);
-        formulario.remitente.value = "";
-        formulario.fecha.value = "";
-        formulario.hora.value = "";
-        formulario.cod_cliente.value = "";
-        formulario.bandeja.selectedIndex = 0;
-        formulario.estado.selectedIndex = 0;
-        formulario.asunto.value = "";
+
     }
     peticion.onreadystatechange = function () {
         if (peticion.readyState == 4 && peticion.status == 200) {
+            divMensaje.style.display = "none";
+            divControles.style.display = 'none'
+            cargarTabla(1);
+            formulario.remitente.value = "";
+            formulario.fecha.value = "";
+            formulario.hora.value = "";
+            formulario.cod_cliente.value = "";
+            formulario.bandeja.selectedIndex = 0;
+            formulario.estado.selectedIndex = 0;
+            formulario.asunto.value = "";
             loader.style.display = "none";
+            formulario.chkBandeja.checked = false;
+            formulario.chkRemitente.checked = false;
+            formulario.chkFechaHora.checked = false;
+            formulario.chkCodCliente.checked = false;
+            formulario.chkEstado.checked = false;
+
             document.getElementById('btnAgregar').style.display = "block";
             document.getElementById('btnUpdate').style.display = "none";
             document.getElementById('btnCancelar').style.display = 'none';
             document.getElementById('cod_cliente').disabled = false;
-
+        } else if (peticion.readyState != 4 && peticion.status != 200) {
+            divMensaje.innerHTML = 'Ha ocurrido un problema vuelva a intentarlo';
+            divMensaje.style.backgroundColor = "red"
+            divMensaje.style.display = "block";
         }
-    }
+    };
     peticion.send(parametros);
 
-}
+};
 
 function EliminarFila(r) {
     var question = confirm('Esta seguro que desea eliminar esta flila?');
@@ -386,8 +428,29 @@ function cancelUpdate() {
     formulario.bandeja.selectedIndex = 0;
     formulario.estado.selectedIndex = 0;
     formulario.asunto.value = "";
+    divControles.style.display = 'none'
+    document.getElementById('chkBandeja').checked = false;
+    document.getElementById('chkRemitente').checked = false;
+    document.getElementById('chkFechaHora').checked = false;
+    document.getElementById('chkCodCliente').checked = false;
+    document.getElementById('chkEstado').checked = false;
     document.getElementById('btnAgregar').style.display = "block";
     document.getElementById('btnUpdate').style.display = "none";
     document.getElementById('btnCancelar').style.display = 'none';
     document.getElementById('cod_cliente').disabled = false;
+}
+
+function chkOpciones() {
+    var cboEstado = document.getElementById('estado'),
+        chkControles = document.getElementById('chkControles');
+    if (cboEstado.value == 'ACTUALIZACION' || cboEstado.value == 'DEVUELTO') {
+        chkControles.style.display = 'block';
+    } else {
+        chkControles.style.display = 'none';
+        document.getElementById('chkBandeja').checked = false;
+        document.getElementById('chkRemitente').checked = false;
+        document.getElementById('chkFechaHora').checked = false;
+        document.getElementById('chkCodCliente').checked = false;
+        document.getElementById('chkEstado').checked = false;
+    }
 }

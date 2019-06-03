@@ -25,6 +25,7 @@ class informeController extends Controller
         $informe_model->CH_COD_CLIENTE = $_POST['cod_cliente'];
         $informe_model->VC_ESTADO = $_POST['estado'];
         $informe_model->VC_ASUNTO = $_POST['asunto'];
+        $informe_model->VC_EDITADOS = $_POST['editados'];
         $informe_model->CH_ID_USUARIO_CREACION = $usuario->CH_ID_USUARIO;
         $informe_model->DT_FECHA_CREACION = now();
 
@@ -46,6 +47,7 @@ class informeController extends Controller
         $informe_update->CH_COD_CLIENTE = $_POST['cod_cliente'];
         $informe_update->VC_ESTADO = $_POST['estado'];
         $informe_update->VC_ASUNTO = $_POST['asunto'];
+        $informe_update->VC_EDITADOS = $_POST['editados'];
         $informe_update->CH_ID_USUARIO_UPDATE = $usuario->CH_ID_USUARIO;
         $informe_update->DT_FECHA_UPDATE = now();
 
