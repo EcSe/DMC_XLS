@@ -1,35 +1,41 @@
-
 //Carga de Usuarios
-var btnAgregar = document.getElementById('btnAgregar'),
+let btnAgregar = document.getElementById('btnAgregar'),
     btnUpdate = document.getElementById('btnUpdate'),
     btnCargaTblMes = document.getElementById('btnCargaMes'),
     formulario = document.getElementById('formulario'),
     tabla = document.getElementById('tabla'),
     loader = document.getElementById('loader'),
     frmUsuario = document.getElementById('formUsuario'),
-    divControles = document.getElementById('chkControles');
+    divControles = document.getElementById('chkControles'),
+    divControles2 = document.getElementById('chkControles2');
 
-var cargaBandeja, cargaRemitente, cargaFecha, cargaHora,
+let cargaBandeja, cargaRemitente, cargaFecha, cargaHora,
     cargaCliente, cargaEstado, cargaAsunto;
-var paginaActual = 1;
+let paginaActual = 1;
 
 
-formulario.addEventListener('submit', function (e) {
+formulario.addEventListener('submit', (e) => {
     AgregarInforme(e)
 });
 
-function AgregarInforme(e) {
+let AgregarInforme = (e) => {
     e.preventDefault();
-    var peticion = new XMLHttpRequest();
+    let peticion = new XMLHttpRequest();
     peticion.open('POST', '/AgregarInforme');
     loader.style.display = 'block';
 
     //Comprobando checkbox
-    formulario.chkBandeja.checked ? chkBandejaVal = formulario.chkBandeja.value : chkBandejaVal = '';
-    formulario.chkRemitente.checked ? chkRemitenteVal = formulario.chkRemitente.value : chkRemitenteVal = '';
-    formulario.chkFechaHora.checked ? chkFechaHoraVal = formulario.chkFechaHora.value : chkFechaHoraVal = '';
-    formulario.chkCodCliente.checked ? chkCodClienteVal = formulario.chkCodCliente.value : chkCodClienteVal = '';
-    formulario.chkEstado.checked ? chkEstadoVal = formulario.chkEstado.value : chkEstadoVal = '';
+    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '';
+    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '';
+    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '';
+    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '';
+    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '';
+
+    //Controles2
+    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '';
+    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '';
+    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '';
+    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '';
 
     cargaBandeja = formulario.bandeja.value.trim();
     cargaRemitente = formulario.remitente.value.trim();
@@ -38,19 +44,19 @@ function AgregarInforme(e) {
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
-    cargaEditados = chkBandejaVal.concat(chkRemitenteVal, chkFechaHoraVal, chkCodClienteVal, chkEstadoVal);
+    cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
+        chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
 
-
-    var parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
+    let parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
         '&editados=' + cargaEditados;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    peticion.onload = function () {
+    peticion.onload = () => {
 
     }
 
-    peticion.onreadystatechange = function () {
+    peticion.onreadystatechange = () => {
         if (peticion.readyState == 4 && peticion.status == 200) {
             divMensaje.style.display = "none";
             cargarTabla(1);
@@ -63,11 +69,16 @@ function AgregarInforme(e) {
             formulario.asunto.value = "";
             loader.style.display = "none";
             divControles.style.display = "none";
-            formulario.chkBandeja.checked = false;
-            formulario.chkRemitente.checked = false;
-            formulario.chkFechaHora.checked = false;
-            formulario.chkCodCliente.checked = false;
-            formulario.chkEstado.checked = false;
+            divControles2.style.display = "none";
+            formulario.chkNombres.checked = false;
+            formulario.chkDirecciones.checked = false;
+            formulario.chkMails.checked = false;
+            formulario.chkTelefonos.checked = false;
+            formulario.chkFechaNac.checked = false;
+            formulario.chkTipoDoc.checked = false;
+            formulario.chkAgenciamiento.checked = false;
+            formulario.chkSexo.checked = false;
+            formulario.chkGenero.checked = false;
 
         } else if (peticion.readyState != 4 && peticion.status != 200) {
             divMensaje.innerHTML = 'Ha ocurrido un problema vuelva a intentarlo';
@@ -81,38 +92,38 @@ function AgregarInforme(e) {
 };
 
 //Paginacion 
-function prevPage() {
+let prevPage = () => {
     if (paginaActual > 1) {
         paginaActual--;
         cargarTabla(paginaActual);
     }
 }
 
-function nextPage() {
+let nextPage = () => {
     if (paginaActual < 300) {
         paginaActual++;
         cargarTabla(paginaActual);
     }
 }
 
-function cargarTabla(page) {
-    var peticion = new XMLHttpRequest();
+let cargarTabla = (page) => {
+    let peticion = new XMLHttpRequest();
     peticion.open('GET', '/listaInformes');
     loader.style.display = 'block';
 
-    peticion.onload = function () {
-        var datos = JSON.parse(peticion.responseText);
+    peticion.onload = () => {
+        let datos = JSON.parse(peticion.responseText);
         //document.getElementById('nroregistros').value = datos.informes.length;
         //Paginacion en Javascript
-        var nroPaginas = Math.ceil((datos.informes.length) / 10);
+        let nroPaginas = Math.ceil((datos.informes.length) / 10);
 
         //validando pagina 
         if (page < 1) page = 1;
         if (page > nroPaginas) page = nroPaginas;
 
         //Paginacion javascript
-        var btnAnt = document.getElementById('btnAnterior');
-        var btnSig = document.getElementById('btnSiguiente');
+        let btnAnt = document.getElementById('btnAnterior');
+        let btnSig = document.getElementById('btnSiguiente');
         spanPage.innerHTML = page;
         if (page == 1) {
             btnAnt.style.visibility = "hidden";
@@ -128,12 +139,12 @@ function cargarTabla(page) {
         if (datos.idPerfil == 1) {
             document.getElementById('nroregistros').value = datos.informes.length;
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
-            for (var i = (page - 1) * 100; i < (page * 100); i++) {
-                var fila = document.createElement('tr');
+            for (let i = (page - 1) * 100; i < (page * 100); i++) {
+                let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
                 fila.innerHTML += ("<td style='display:none;'>" + datos.informes[i].VC_EDITADOS + "</td>");
 
-                var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
+                let fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
                 fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
 
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_BANDEJA + "</td>");
@@ -153,11 +164,11 @@ function cargarTabla(page) {
         } else {
             document.getElementById('nroregistros').value = datos.informes.length + ' totales y ' + datos.cantInformesDia + ' hoy';
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
-            for (var i = (page - 1) * 100; i < (page * 100); i++) {
-                var fila = document.createElement('tr');
+            for (let i = (page - 1) * 100; i < (page * 100); i++) {
+                let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
 
-                var fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
+                let fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
                 fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
 
                 // fila.innerHTML += ("<td>" + datos[i].DT_FECHA_CREACION + "</td>");
@@ -172,7 +183,7 @@ function cargarTabla(page) {
             }
         }
     }
-    peticion.onreadystatechange = function () {
+    peticion.onreadystatechange = () => {
         if (peticion.readyState == 4 && peticion.status == 200) {
             loader.style.display = "none";
 
@@ -181,24 +192,24 @@ function cargarTabla(page) {
     peticion.send();
 };
 
-function informesMesUsuario() {
-    var tblInformesUsuario = document.getElementById('tblCantidadxUser'),
+let informesMesUsuario = () => {
+    let tblInformesUsuario = document.getElementById('tblCantidadxUser'),
         tblConteoEstado = document.getElementById('tblCantidadxEstado');
-    var peticionMes = new XMLHttpRequest();
+    let peticionMes = new XMLHttpRequest();
     peticionMes.open('GET', '/informesMes');
 
-    peticionMes.onload = function () {
-        var datosInformeMes = JSON.parse(peticionMes.responseText);
+    peticionMes.onload = () => {
+        let datosInformeMes = JSON.parse(peticionMes.responseText);
         tblInformesUsuario.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">CANTIDAD</th></tr></thead>';
-        for (var i = 0; i < datosInformeMes.datosMes.length; i++) {
-            var filatblMes = document.createElement('tr');
+        for (let i = 0; i < datosInformeMes.datosMes.length; i++) {
+            let filatblMes = document.createElement('tr');
             filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].ID_USUARIO + "</td>");
             filatblMes.innerHTML += ("<td>" + datosInformeMes.datosMes[i].CANTIDAD + "</td>");
             tblInformesUsuario.appendChild(filatblMes);
         }
         tblConteoEstado.innerHTML = '<thead><tr><th scope="col">ID USUARIO</th><th scope="col">ESTADO</th><th>CANTIDAD</th></tr></thead>';
-        for (var j = 0; j < datosInformeMes.datosEstado.length; j++) {
-            var filatblConteo = document.createElement('tr');
+        for (let j = 0; j < datosInformeMes.datosEstado.length; j++) {
+            let filatblConteo = document.createElement('tr');
             filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CH_ID_USUARIO_CREACION + "</td>");
             filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].VC_ESTADO + "</td>")
             filatblConteo.innerHTML += ("<td>" + datosInformeMes.datosEstado[j].CANTIDAD + "</td>");
@@ -206,7 +217,7 @@ function informesMesUsuario() {
         }
     };
 
-    peticionMes.onreadystatechange = function () {
+    peticionMes.onreadystatechange = () => {
         if (peticionMes.readyState == 4 && peticionMes.status == 200) {
 
         }
@@ -215,8 +226,8 @@ function informesMesUsuario() {
 
 }
 
-function EditarFila(e) {
-    var idInforme = e.parentNode.parentElement.cells[0].innerHTML,
+let EditarFila = (e) => {
+    let idInforme = e.parentNode.parentElement.cells[0].innerHTML,
         editados_up = e.parentNode.parentElement.cells[1].innerHTML,
         bandeja_up = e.parentNode.parentElement.cells[3].innerHTML,
         remitente_up = e.parentNode.parentElement.cells[4].innerHTML,
@@ -227,23 +238,32 @@ function EditarFila(e) {
 
     //Llenando los checkbox para actualizar
     if (estado_up == 'ACTUALIZACION' || estado_up == 'DEVUELTO') {
-        divControles.style.display = 'block'
+        divControles.style.display = 'block';
+        divControles2.style.display = 'block';
 
-        var arrayEditados = editados_up.split(" ");
-        var indexBandeja = arrayEditados.indexOf('Bandeja');
-        indexBandeja >= 0 ? document.getElementById('chkBandeja').checked = true : document.getElementById('chkBandeja').checked = false;
-        var indexRemitente = arrayEditados.indexOf('Remitente');
-        indexRemitente >= 0 ? document.getElementById('chkRemitente').checked = true : document.getElementById('chkRemitente').checked = false;
-        var indexFechaHora = arrayEditados.indexOf('fechaHora');
-        indexFechaHora >= 0 ? document.getElementById('chkFechaHora').checked = true : document.getElementById('chkFechaHora').checked = false;
-        var indexCodigoCliente = arrayEditados.indexOf('CodigoCliente');
-        indexCodigoCliente >= 0 ? document.getElementById('chkCodCliente').checked = true : document.getElementById('chkCodCliente').checked = false;
-        var indexEstado = arrayEditados.indexOf('Estado');
-        indexEstado >= 0 ? document.getElementById('chkEstado').checked = true : document.getElementById('chkEstado').checked = false;
+        let arrayEditados = editados_up.split("||");
+        let indexNombres = arrayEditados.indexOf('Nombres');
+        indexNombres >= 0 ? document.getElementById('chkNombres').checked = true : document.getElementById('chkNombres').checked = false;
+        let indexDirecciones = arrayEditados.indexOf('Direcciones');
+        indexDirecciones >= 0 ? document.getElementById('chkDirecciones').checked = true : document.getElementById('chkDirecciones').checked = false;
+        let indexMails = arrayEditados.indexOf('Mails');
+        indexMails >= 0 ? document.getElementById('chkMails').checked = true : document.getElementById('chkMails').checked = false;
+        let indexTelefonos = arrayEditados.indexOf('Telefonos');
+        indexTelefonos >= 0 ? document.getElementById('chkTelefonos').checked = true : document.getElementById('chkTelefonos').checked = false;
+        let indexFechaNac = arrayEditados.indexOf('FechaNac');
+        indexFechaNac >= 0 ? document.getElementById('chkFechaNac').checked = true : document.getElementById('chkFechaNac').checked = false;
+        let indexTipoDocumento = arrayEditados.indexOf('TipoDocumento');
+        indexTipoDocumento >= 0 ? document.getElementById('chkTipoDoc').checked = true : document.getElementById('chkTipoDoc').checked = false;
+        let indexAgenciamiento = arrayEditados.indexOf('Agenciamiento');
+        indexAgenciamiento >= 0 ? document.getElementById('chkAgenciamiento').checked = true : document.getElementById('chkAgenciamiento').checked = false;
+        let indexSexo = arrayEditados.indexOf('Sexo');
+        indexSexo >= 0 ? document.getElementById('chkSexo').checked = true : document.getElementById('chkSexo').checked = false;
+        let indexGenero = arrayEditados.indexOf('Genero');
+        indexGenero >= 0 ? document.getElementById('chkGenero').checked = true : document.getElementById('chkGenero').checked = false;
     }
 
     //Obteniendo Fechas y Horas para actualizacion
-    var fechaUp = new Date(fechaHora_up),
+    let fechaUp = new Date(fechaHora_up),
         dia = fechaUp.getDate(),
         mes = fechaUp.getMonth() + 1,
         Year = fechaUp.getFullYear(),
@@ -273,19 +293,25 @@ function EditarFila(e) {
     document.getElementById('cod_cliente').disabled = true;
 }
 
-function EditarInforme() {
+let EditarInforme = () => {
     // e.preventDefault();
 
     //Agregando los nuevos valores
-    var peticion = new XMLHttpRequest();
+    let peticion = new XMLHttpRequest();
     peticion.open('POST', '/EditarInforme');
 
     //Valorando checkbox
-    formulario.chkBandeja.checked ? chkBandejaVal = formulario.chkBandeja.value : chkBandejaVal = '';
-    formulario.chkRemitente.checked ? chkRemitenteVal = formulario.chkRemitente.value : chkRemitenteVal = '';
-    formulario.chkFechaHora.checked ? chkFechaHoraVal = formulario.chkFechaHora.value : chkFechaHoraVal = '';
-    formulario.chkCodCliente.checked ? chkCodClienteVal = formulario.chkCodCliente.value : chkCodClienteVal = '';
-    formulario.chkEstado.checked ? chkEstadoVal = formulario.chkEstado.value : chkEstadoVal = '';
+    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '';
+    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '';
+    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '';
+    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '';
+    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '';
+
+    //Controles2
+    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '';
+    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '';
+    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '';
+    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '';
 
     idInforme = formulario.inputinforme.value.trim();
     cargaBandeja = formulario.bandeja.value.trim();
@@ -295,20 +321,22 @@ function EditarInforme() {
     cargaCliente = formulario.cod_cliente.value.trim();
     cargaEstado = formulario.estado.value.trim();
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
-    cargaEditados = chkBandejaVal.concat(chkRemitenteVal, chkFechaHoraVal, chkCodClienteVal, chkEstadoVal);
+    cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
+        chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
 
-    var parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
+    let parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
         '&editados=' + cargaEditados;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    peticion.onload = function () {
+    peticion.onload = () => {
 
     }
-    peticion.onreadystatechange = function () {
+    peticion.onreadystatechange = () => {
         if (peticion.readyState == 4 && peticion.status == 200) {
             divMensaje.style.display = "none";
-            divControles.style.display = 'none'
+            divControles.style.display = 'none';
+            divControles2.style.display = "none";
             cargarTabla(1);
             formulario.remitente.value = "";
             formulario.fecha.value = "";
@@ -318,11 +346,15 @@ function EditarInforme() {
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
             loader.style.display = "none";
-            formulario.chkBandeja.checked = false;
-            formulario.chkRemitente.checked = false;
-            formulario.chkFechaHora.checked = false;
-            formulario.chkCodCliente.checked = false;
-            formulario.chkEstado.checked = false;
+            formulario.chkNombres.checked = false;
+            formulario.chkDirecciones.checked = false;
+            formulario.chkMails.checked = false;
+            formulario.chkTelefonos.checked = false;
+            formulario.chkFechaNac.checked = false;
+            formulario.chkTipoDoc.checked = false;
+            formulario.chkAgenciamiento.checked = false;
+            formulario.chkSexo.checked = false;
+            formulario.chkGenero.checked = false;
 
             document.getElementById('btnAgregar').style.display = "block";
             document.getElementById('btnUpdate').style.display = "none";
@@ -338,22 +370,22 @@ function EditarInforme() {
 
 };
 
-function EliminarFila(r) {
-    var question = confirm('Esta seguro que desea eliminar esta flila?');
+let EliminarFila = (r) => {
+    let question = confirm('Esta seguro que desea eliminar esta flila?');
     if (question) {
-        var i = r.parentNode.parentNode.rowIndex;
-        var id = r.parentNode.parentElement.cells[0].innerHTML;
+        let i = r.parentNode.parentNode.rowIndex;
+        let id = r.parentNode.parentElement.cells[0].innerHTML;
         document.getElementById("tabla").deleteRow(i);
 
-        var peticion = new XMLHttpRequest();
+        let peticion = new XMLHttpRequest();
         peticion.open('POST', '/eliminar');
-        var parametos = 'idInforme=' + id;
+        let parametos = 'idInforme=' + id;
         peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-        peticion.onload = function () {
+        peticion.onload = () => {
             cargarTabla(1);
         }
-        peticion.onreadystatechange = function () {
+        peticion.onreadystatechange = () => {
             if (peticion.readyState == 4 && peticion.status == 200) {
                 loader.style.display = "none";
             }
@@ -362,13 +394,13 @@ function EliminarFila(r) {
     }
 }
 
-frmUsuario.addEventListener('submit', function (e) {
+frmUsuario.addEventListener('submit', (e) => {
     AgregarUsuario(e);
 });
 
-function AgregarUsuario(e) {
+let AgregarUsuario = (e) => {
     e.preventDefault();
-    var peticion = new XMLHttpRequest();
+    let peticion = new XMLHttpRequest();
     peticion.open('POST', '/agregarUsuario');
 
     cargaIdUsuario = frmUsuario.idUsuario.value.trim();
@@ -378,12 +410,12 @@ function AgregarUsuario(e) {
     cargaPassword = frmUsuario.password.value.trim();
     cargaEmail = frmUsuario.email.value.trim();
 
-    var paramUser = 'idUsuario=' + cargaIdUsuario + '&nombre=' + cargaNombre + '&apellidos=' + cargaApellidos +
+    let paramUser = 'idUsuario=' + cargaIdUsuario + '&nombre=' + cargaNombre + '&apellidos=' + cargaApellidos +
         '&idPerfil=' + cargaIdPerfil + '&password=' + cargaPassword + '&email=' + cargaEmail;
 
     peticion.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-    peticion.onload = function () {
+    peticion.onload = () => {
         frmUsuario.idUsuario.value = "";
         frmUsuario.nombre.value = "";
         frmUsuario.apellidos.value = "";
@@ -392,22 +424,21 @@ function AgregarUsuario(e) {
         frmUsuario.email.value = "";
     }
 
-    peticion.onreadystatechange = function () {
-        if (peticion.readyState == 4 && peticion.status == 200) {
-        }
+    peticion.onreadystatechange = () => {
+        if (peticion.readyState == 4 && peticion.status == 200) {}
     }
     peticion.send(paramUser);
 }
 
 //Buscar en la tabla
-function BuscarCliente() {
-    var input, filter, table, tr, td, i, txtValue;
+let BuscarCliente = () => {
+    let input, filter, table, tr, td, i, txtValue;
     input = document.getElementById('buscarCliente');
     filter = input.value.toUpperCase();
     table = document.getElementById('tabla');
     tr = table.getElementsByTagName('tr');
 
-    for (i = 0; i < tr.length; i++) {
+    for (let i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[6];
         if (td) {
             txtValue = td.textContent || td.innerText;
@@ -420,7 +451,7 @@ function BuscarCliente() {
     }
 }
 
-function cancelUpdate() {
+let cancelUpdate = () => {
     formulario.remitente.value = "";
     formulario.fecha.value = "";
     formulario.hora.value = "";
@@ -429,28 +460,34 @@ function cancelUpdate() {
     formulario.estado.selectedIndex = 0;
     formulario.asunto.value = "";
     divControles.style.display = 'none'
-    document.getElementById('chkBandeja').checked = false;
-    document.getElementById('chkRemitente').checked = false;
-    document.getElementById('chkFechaHora').checked = false;
-    document.getElementById('chkCodCliente').checked = false;
-    document.getElementById('chkEstado').checked = false;
+    divControles2.style.display = "none";
+    document.getElementById('chkNombres').checked = false;
+    document.getElementById('chkDirecciones').checked = false;
+    document.getElementById('chkMails').checked = false;
+    document.getElementById('chkTelefonos').checked = false;
+    document.getElementById('chkFechaNac').checked = false;
+    document.getElementById('chkTipoDoc').checked = false;
+    document.getElementById('chkAgenciamiento').checked = false;
+    document.getElementById('chkSexo').checked = false;
+    document.getElementById('chkGenero').checked = false;
     document.getElementById('btnAgregar').style.display = "block";
     document.getElementById('btnUpdate').style.display = "none";
     document.getElementById('btnCancelar').style.display = 'none';
     document.getElementById('cod_cliente').disabled = false;
 }
 
-function chkOpciones() {
-    var cboEstado = document.getElementById('estado'),
-        chkControles = document.getElementById('chkControles');
+let chkOpciones = () => {
+    let cboEstado = document.getElementById('estado');
     if (cboEstado.value == 'ACTUALIZACION' || cboEstado.value == 'DEVUELTO') {
-        chkControles.style.display = 'block';
+        divControles.style.display = 'block';
+        divControles2.style.display = 'block';
     } else {
-        chkControles.style.display = 'none';
-        document.getElementById('chkBandeja').checked = false;
-        document.getElementById('chkRemitente').checked = false;
-        document.getElementById('chkFechaHora').checked = false;
-        document.getElementById('chkCodCliente').checked = false;
-        document.getElementById('chkEstado').checked = false;
+        divControles.style.display = 'none';
+        divControles2.style.display = 'none';
+        document.getElementById('chkNombres').checked = false;
+        document.getElementById('chkDirecciones').checked = false;
+        document.getElementById('chkMails').checked = false;
+        document.getElementById('chkTelefonos').checked = false;
+        document.getElementById('chkFechaNac').checked = false;
     }
 }

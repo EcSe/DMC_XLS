@@ -67,16 +67,14 @@
                                     </select>
                                 </div>
                                 <div class="col col-md-4">
-                                    <input type="email" id="remitente" name="remitente" placeholder="Ingrese Remitente"
-                                        required>
+                                    <input type="email" id="remitente" name="remitente" placeholder="Ingrese Remitente" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group" style="display:inline-flex">
                                 <div class="col col-md-4">
-                                    <input type="text" id="cod_cliente" name="cod_cliente"
-                                        placeholder="Ingrese Cod Cliente" maxlength="14" required>
+                                    <input type="text" id="cod_cliente" name="cod_cliente" placeholder="Ingrese Cod Cliente" maxlength="14" required>
                                 </div>
                                 <div class="col col-md-4">
                                     <span style="float:left">Escoger Fecha &nbsp;: </span>
@@ -91,40 +89,58 @@
                         <div class="row" id="chkControles" style="display: none;">
                             <div class="col-md-12 form-group" style="display: inline-flex">
                                 <div class="col col-md-2">
-                                    <input type="checkbox" id="chkBandeja" value=" Bandeja">
-                                    <label for="chkBandeja">Bandeja</label>
+                                    <input type="checkbox" id="chkNombres" value="Nombres||">
+                                    <label for="chkNombres">Nombres</label>
                                 </div>
                                 <div class="col col-md-2">
-                                    <input type="checkbox" id="chkRemitente" value=" Remitente">
-                                    <label for="chkRemitente">Remitente</label>
+                                    <input type="checkbox" id="chkDirecciones" value="Direcciones||">
+                                    <label for="chkDirecciones">Direcciones</label>
                                 </div>
                                 <div class="col col-md-2">
-                                    <input type="checkbox" id="chkFechaHora" value=" fechaHora">
-                                    <label for="chkFechaHora">FechaHora</label>
+                                    <input type="checkbox" id="chkMails" value="Mails||">
+                                    <label for="chkMails">Mails</label>
                                 </div>
                                 <div class="col col-md-2">
-                                    <input type="checkbox" id="chkCodCliente" value=" CodigoCliente">
-                                    <label for="chkCodCliente">Codigo Cliente</label>
+                                    <input type="checkbox" id="chkTelefonos" value="Telefonos||">
+                                    <label for="chkTelefonos">Telefonos</label>
                                 </div>
                                 <div class="col col-md-2">
-                                    <input type="checkbox" id="chkEstado" value=" Estado">
-                                    <label for="chkEstado">Estado</label>
+                                    <input type="checkbox" id="chkFechaNac" value="FechaNac||">
+                                    <label for="chkFechaNac">Fecha Nacimiento</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="chkControles2" style="display: none;">
+                            <div class="col-md-12 form-group" style="display: inline-flex">
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkTipoDoc" value="TipoDocumento||">
+                                    <label for="chkTipoDoc">Tipo Documento</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkAgenciamiento" value="Agenciamiento||">
+                                    <label for="chkAgenciamiento">Agenciamiento</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkSexo" value="Sexo||">
+                                    <label for="chkSexo">Sexo</label>
+                                </div>
+                                <div class="col col-md-2">
+                                    <input type="checkbox" id="chkGenero" value="Genero||">
+                                    <label for="chkGenero">Genero</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group" style="display:inline-flex">
                                 <div class="col col-md-8">
-                                    <textarea name="asunto" cols="40" rows="3" style="resize:none;"
-                                        placeholder="  Ingresar asunto" id="asunto"></textarea>
+                                    <textarea name="asunto" cols="40" rows="3" style="resize:none;" placeholder="  Ingresar asunto" id="asunto" required></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group" style="display:inline-flex">
                                 <div class="col col-md-6">
-                                    <input class="inputbusqueda" type="text" placeholder="Buscar por Codigo Cliente..."
-                                        id="buscarCliente" name="buscarCliente" onkeyup="BuscarCliente()">
+                                    <input class="inputbusqueda" type="text" placeholder="Buscar por Codigo Cliente..." id="buscarCliente" name="buscarCliente" onkeyup="BuscarCliente()">
                                 </div>
                             </div>
                         </div>
@@ -134,10 +150,8 @@
                                     <button type="submit" id="btnAgregar" class="btn btn-success">Agregar</button>
                                 </div>
                                 <div class="col-md-4" style="display: inline-flex;">
-                                    <button type="button" id="btnUpdate" onclick="EditarInforme()"
-                                        style="display:none; float:left;" class="btn btn-success">Actualizar</button>
-                                    <button type="button" id="btnCancelar" onclick="cancelUpdate()"
-                                        style="display:none;float: right;" class="btn btn-danger">Cancelar</button>
+                                    <button type="button" id="btnUpdate" onclick="EditarInforme()" style="display:none; float:left;" class="btn btn-success">Actualizar</button>
+                                    <button type="button" id="btnCancelar" onclick="cancelUpdate()" style="display:none;float: right;" class="btn btn-danger">Cancelar</button>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Nro Registros</label>
@@ -201,8 +215,7 @@
                     </form>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <input type="button" name="btnCargaMes" id="btnCargaMes" onclick="informesMesUsuario(this)"
-                                value="Cargar Tabla" style="display: block;margin:auto" class="btn btn-success">
+                            <input type="button" name="btnCargaMes" id="btnCargaMes" onclick="informesMesUsuario(this)" value="Cargar Tabla" style="display: block;margin:auto" class="btn btn-success">
                         </div>
                     </div>
                     <div class="row">
@@ -225,16 +238,13 @@
                         <div class="row">
                             <div class="col-md-12 form-group" style="display:inline-flex">
                                 <div class="col col-md-4">
-                                    <input type="text" name="idUsuario" id="idUsuario" placeholder="Ingresar Usuario ID"
-                                        style="display: inline">
+                                    <input type="text" name="idUsuario" id="idUsuario" placeholder="Ingresar Usuario ID" style="display: inline">
                                 </div>
                                 <div class="col col-md-4">
-                                    <input type="password" name="password" id="password"
-                                        placeholder="Ingrese Contraseña">
+                                    <input type="password" name="password" id="password" placeholder="Ingrese Contraseña">
                                 </div>
                                 <div class="col col-md-4 ">
-                                    <input type="text" name="nombre" id="nombre" placeholder="Ingresar Nombre"
-                                        style="display: inline">
+                                    <input type="text" name="nombre" id="nombre" placeholder="Ingresar Nombre" style="display: inline">
                                 </div>
                             </div>
                         </div>
@@ -257,8 +267,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <input type="submit" class="btn btn-success" value="Agregar"
-                                    style="display: block;margin:auto">
+                                <input type="submit" class="btn btn-success" value="Agregar" style="display: block;margin:auto">
                             </div>
                         </div>
                     </div>
