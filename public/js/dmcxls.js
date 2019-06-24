@@ -157,16 +157,13 @@ let cargarTabla = (page) => {
                 fila.innerHTML += ("<td><input type='button' value='U' onclick='EditarFila(this)'><input type='button' value='D' onclick='EliminarFila(this)'>");
                 tabla.appendChild(fila);
             }
-
-
-
-
         } else {
             document.getElementById('nroregistros').value = datos.informes.length + ' totales y ' + datos.cantInformesDia + ' hoy';
             tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
             for (let i = (page - 1) * 100; i < (page * 100); i++) {
                 let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
+                fila.innerHTML += ("<td  style='display:none;'></td>");
 
                 let fecha = new Date(datos.informes[i].DT_FECHA_CREACION);
                 fila.innerHTML += ("<td>" + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getUTCFullYear() + "</td>");
