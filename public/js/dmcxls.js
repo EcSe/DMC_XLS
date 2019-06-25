@@ -25,17 +25,17 @@ let AgregarInforme = (e) => {
     loader.style.display = 'block';
 
     //Comprobando checkbox
-    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '';
-    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '';
-    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '';
-    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '';
-    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '';
+    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '@||';
+    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '@||';
+    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '@||';
+    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '@||';
+    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '@||';
 
     //Controles2
-    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '';
-    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '';
-    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '';
-    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '';
+    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '@||';
+    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '@||';
+    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '@||';
+    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '@||';
 
     cargaBandeja = formulario.bandeja.value.trim();
     cargaRemitente = formulario.remitente.value.trim();
@@ -46,10 +46,11 @@ let AgregarInforme = (e) => {
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
     cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
         chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
+    cargaProducto = formulario.producto.value.trim();
 
     let parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
-        '&editados=' + cargaEditados;
+        '&editados=' + cargaEditados + '&producto=' + cargaProducto;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = () => {
@@ -67,6 +68,7 @@ let AgregarInforme = (e) => {
             formulario.bandeja.selectedIndex = 0;
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
+            formulario.producto.value = "";
             loader.style.display = "none";
             divControles.style.display = "none";
             divControles2.style.display = "none";
@@ -138,7 +140,7 @@ let cargarTabla = (page) => {
         }
         if (datos.idPerfil == 1) {
             document.getElementById('nroregistros').value = datos.informes.length;
-            tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
+            tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">PRODUCTO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
             for (let i = (page - 1) * 100; i < (page * 100); i++) {
                 let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
@@ -153,6 +155,7 @@ let cargarTabla = (page) => {
                 fila.innerHTML += ("<td>" + datos.informes[i].DT_FECHA_HORA + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_COD_CLIENTE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_ESTADO + "</td>");
+                fila.innerHTML += ("<td>" + datos.informes[i].VC_PRODUCTO + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_ID_USUARIO_CREACION + "</td>");
                 fila.innerHTML += ("<td><input type='button' value='U' onclick='EditarFila(this)'><input type='button' value='D' onclick='EliminarFila(this)'>");
                 tabla.appendChild(fila);
@@ -175,6 +178,7 @@ let cargarTabla = (page) => {
                 fila.innerHTML += ("<td>" + datos.informes[i].DT_FECHA_HORA + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_COD_CLIENTE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_ESTADO + "</td>");
+                fila.innerHTML += ("<td>" + datos.informes[i].VC_PRODUCTO + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_ID_USUARIO_CREACION + "</td>");
                 tabla.appendChild(fila);
             }
@@ -231,7 +235,8 @@ let EditarFila = (e) => {
         asunto_up = e.parentNode.parentElement.cells[5].innerHTML,
         fechaHora_up = e.parentNode.parentElement.cells[6].innerHTML,
         cod_cliente_up = e.parentNode.parentElement.cells[7].innerHTML,
-        estado_up = e.parentNode.parentElement.cells[8].innerHTML;
+        estado_up = e.parentNode.parentElement.cells[8].innerHTML,
+        producto_up = e.parentNode.parentElement.cells[9].innerHTML;
 
     //Llenando los checkbox para actualizar
     if (estado_up == 'ACTUALIZACION' || estado_up == 'DEVUELTO') {
@@ -283,6 +288,7 @@ let EditarFila = (e) => {
     formulario.hora.value = horaEdit;
     formulario.cod_cliente.value = cod_cliente_up;
     formulario.estado.value = estado_up;
+    formulario.producto.value = producto_up;
 
     document.getElementById('btnAgregar').style.display = "none";
     document.getElementById('btnUpdate').style.display = "block";
@@ -298,17 +304,17 @@ let EditarInforme = () => {
     peticion.open('POST', '/EditarInforme');
 
     //Valorando checkbox
-    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '';
-    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '';
-    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '';
-    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '';
-    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '';
+    formulario.chkNombres.checked ? chkNombresVal = formulario.chkNombres.value : chkNombresVal = '@||';
+    formulario.chkDirecciones.checked ? chkDireccionesVal = formulario.chkDirecciones.value : chkDireccionesVal = '@||';
+    formulario.chkMails.checked ? chkMailsVal = formulario.chkMails.value : chkMailsVal = '@||';
+    formulario.chkTelefonos.checked ? chkTelefonosVal = formulario.chkTelefonos.value : chkTelefonosVal = '@||';
+    formulario.chkFechaNac.checked ? chkFechaNacVal = formulario.chkFechaNac.value : chkFechaNacVal = '@||';
 
     //Controles2
-    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '';
-    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '';
-    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '';
-    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '';
+    formulario.chkTipoDoc.checked ? chkTipoDocVal = formulario.chkTipoDoc.value : chkTipoDocVal = '@||';
+    formulario.chkAgenciamiento.checked ? chkAgenciamientoVal = formulario.chkAgenciamiento.value : chkAgenciamientoVal = '@||';
+    formulario.chkSexo.checked ? chkSexoVal = formulario.chkSexo.value : chkSexoVal = '@||';
+    formulario.chkGenero.checked ? chkGeneroVal = formulario.chkGenero.value : chkGeneroVal = '@||';
 
     idInforme = formulario.inputinforme.value.trim();
     cargaBandeja = formulario.bandeja.value.trim();
@@ -320,10 +326,11 @@ let EditarInforme = () => {
     cargaAsunto = encodeURIComponent(formulario.asunto.value.trim());
     cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
         chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
+    cargaProducto = formulario.producto.value.trim();
 
     let parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
-        '&editados=' + cargaEditados;
+        '&editados=' + cargaEditados + '&producto=' + cargaProducto;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = () => {
@@ -342,6 +349,7 @@ let EditarInforme = () => {
             formulario.bandeja.selectedIndex = 0;
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
+            formulario.producto.value = "";
             loader.style.display = "none";
             formulario.chkNombres.checked = false;
             formulario.chkDirecciones.checked = false;
@@ -456,6 +464,7 @@ let cancelUpdate = () => {
     formulario.bandeja.selectedIndex = 0;
     formulario.estado.selectedIndex = 0;
     formulario.asunto.value = "";
+    formulario.producto.value = "";
     divControles.style.display = 'none'
     divControles2.style.display = "none";
     document.getElementById('chkNombres').checked = false;

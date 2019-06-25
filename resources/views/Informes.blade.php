@@ -135,6 +135,9 @@
                                 <div class="col col-md-8">
                                     <textarea name="asunto" cols="40" rows="3" style="resize:none;" placeholder="  Ingresar asunto" id="asunto" required></textarea>
                                 </div>
+                                <div class="col col-md-4">
+                                    <input type="text" name="producto" id="producto" placeholder="Ingresar Producto" maxlength="4" required>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
