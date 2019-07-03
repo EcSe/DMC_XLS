@@ -47,10 +47,11 @@ let AgregarInforme = (e) => {
     cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
         chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
     cargaProducto = formulario.producto.value.trim();
+    cargaNroTramite = formulario.nroTramite.value.trim();
 
     let parametros = 'bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
-        '&editados=' + cargaEditados + '&producto=' + cargaProducto;
+        '&editados=' + cargaEditados + '&producto=' + cargaProducto + '&nroTramite=' + cargaNroTramite;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = () => {
@@ -69,6 +70,7 @@ let AgregarInforme = (e) => {
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
             formulario.producto.value = "";
+            formulario.nroTramite.value = "";
             loader.style.display = "none";
             divControles.style.display = "none";
             divControles2.style.display = "none";
@@ -140,7 +142,10 @@ let cargarTabla = (page) => {
         }
         if (datos.idPerfil == 1) {
             document.getElementById('nroregistros').value = datos.informes.length;
-            tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">PRODUCTO</th><th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>';
+            tabla.innerHTML = `<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th>
+                                <th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th>
+                                <th scope="col">ESTADO</th><th scope="col">PRODUCTO</th><th scope="col">NRO TRAMITE</th>
+                                <th scope="col">USUARIO</th><th scope="col">ACCIONES</th></tr></thead>`;
             for (let i = (page - 1) * 100; i < (page * 100); i++) {
                 let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
@@ -156,13 +161,16 @@ let cargarTabla = (page) => {
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_COD_CLIENTE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_ESTADO + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_PRODUCTO + "</td>");
+                fila.innerHTML += ("<td>" + datos.informes[i].VC_NRO_TRAMITE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_ID_USUARIO_CREACION + "</td>");
                 fila.innerHTML += ("<td><input type='button' value='U' onclick='EditarFila(this)'><input type='button' value='D' onclick='EliminarFila(this)'>");
                 tabla.appendChild(fila);
             }
         } else {
             document.getElementById('nroregistros').value = datos.informes.length + ' totales y ' + datos.cantInformesDia + ' hoy';
-            tabla.innerHTML = '<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th><th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th><th scope="col">ESTADO</th><th scope="col">USUARIO</th></thead>';
+            tabla.innerHTML = `<thead><tr><th scope="col">DIA</th><th scope="col">CASILLA</th><th scope="col">REMITENTE</th>
+                                <th scope="col">ASUNTO</th><th scope="col">FECHA_HORA</th><th scope="col">CLIENTE</th>
+                                <th scope="col">ESTADO</th><th scope="col">PRODUCTO</th><th scope="col">NRO TRAMITE</th><th scope="col">USUARIO</th></thead>`;
             for (let i = (page - 1) * 100; i < (page * 100); i++) {
                 let fila = document.createElement('tr');
                 fila.innerHTML += ("<td  style='display:none;'>" + datos.informes[i].IN_ID_INFORME + "</td>");
@@ -179,6 +187,7 @@ let cargarTabla = (page) => {
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_COD_CLIENTE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_ESTADO + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].VC_PRODUCTO + "</td>");
+                fila.innerHTML += ("<td>" + datos.informes[i].VC_NRO_TRAMITE + "</td>");
                 fila.innerHTML += ("<td>" + datos.informes[i].CH_ID_USUARIO_CREACION + "</td>");
                 tabla.appendChild(fila);
             }
@@ -237,6 +246,7 @@ let EditarFila = (e) => {
         cod_cliente_up = e.parentNode.parentElement.cells[7].innerHTML,
         estado_up = e.parentNode.parentElement.cells[8].innerHTML,
         producto_up = e.parentNode.parentElement.cells[9].innerHTML;
+    nroTramite_up = e.parentNode.parentElement.cells[10].innerHTML;
 
     //Llenando los checkbox para actualizar
     if (estado_up == 'ACTUALIZACION' || estado_up == 'DEVUELTO') {
@@ -289,6 +299,7 @@ let EditarFila = (e) => {
     formulario.cod_cliente.value = cod_cliente_up;
     formulario.estado.value = estado_up;
     formulario.producto.value = producto_up;
+    formulario.nroTramite.value = nroTramite_up;
 
     document.getElementById('btnAgregar').style.display = "none";
     document.getElementById('btnUpdate').style.display = "block";
@@ -327,10 +338,11 @@ let EditarInforme = () => {
     cargaEditados = chkNombresVal.concat(chkDireccionesVal, chkMailsVal, chkTelefonosVal, chkFechaNacVal,
         chkTipoDocVal, chkAgenciamientoVal, chkSexoVal, chkGeneroVal);
     cargaProducto = formulario.producto.value.trim();
+    cargaNroTramite = formulario.nroTramite.value.trim();
 
     let parametros = 'idInforme=' + idInforme + '&bandeja=' + cargaBandeja + '&remitente=' + cargaRemitente + '&fecha=' + cargaFecha +
         '&hora=' + cargaHora + '&cod_cliente=' + cargaCliente + '&estado=' + cargaEstado + '&asunto=' + cargaAsunto +
-        '&editados=' + cargaEditados + '&producto=' + cargaProducto;
+        '&editados=' + cargaEditados + '&producto=' + cargaProducto + "&nroTramite=" + cargaNroTramite;
     peticion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     peticion.onload = () => {
@@ -350,6 +362,7 @@ let EditarInforme = () => {
             formulario.estado.selectedIndex = 0;
             formulario.asunto.value = "";
             formulario.producto.value = "";
+            formulario.nroTramite.value = "";
             loader.style.display = "none";
             formulario.chkNombres.checked = false;
             formulario.chkDirecciones.checked = false;
@@ -465,6 +478,7 @@ let cancelUpdate = () => {
     formulario.estado.selectedIndex = 0;
     formulario.asunto.value = "";
     formulario.producto.value = "";
+    formulario.nroTramite.value = "";
     divControles.style.display = 'none'
     divControles2.style.display = "none";
     document.getElementById('chkNombres').checked = false;

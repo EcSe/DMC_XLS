@@ -43,8 +43,8 @@
                         </div>
                         <input type="hidden" id="inputinforme" name="inputinforme">
                         <div class="row">
-                            <div class="col-md-12 form-group" style="display: inline-flex">
-                                <div class="col col-md-4 ">
+                            <div class="col-md-12 form-group d-flex justify-content-between">
+                                <div class="col-md-4">
                                     <select name="bandeja" id="bandeja" class="custom-select" required>
                                         <option value="" selected disabled>--Elegir Bandeja--</option>
                                         <option value="CNT">CNT</option>
@@ -57,7 +57,7 @@
                                         <option value="REPROCESOS">REPROCESOS</option>
                                     </select>
                                 </div>
-                                <div class="col col-md-4">
+                                <div class="col-md-4">
                                     <select name="estado" id="estado" class="custom-select" onchange="chkOpciones()" required>
                                         <option value="" selected disabled>--Elegir Estado--</option>
                                         <option value="ACTUALIZACION">ACTUALIZACION</option>
@@ -66,13 +66,13 @@
                                         <option value="VERIFICADO">VERIFICADO</option>
                                     </select>
                                 </div>
-                                <div class="col col-md-4">
+                                <div class="col-md-4">
                                     <input type="email" id="remitente" name="remitente" placeholder="Ingrese Remitente" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group" style="display:inline-flex">
+                            <div class="col-md-12 form-group d-flex justify-content-between">
                                 <div class="col col-md-4">
                                     <input type="text" id="cod_cliente" name="cod_cliente" placeholder="Ingrese Cod Cliente" maxlength="14" required>
                                 </div>
@@ -131,17 +131,20 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group" style="display:inline-flex">
-                                <div class="col col-md-8">
+                            <div class="col-md-12 form-group d-flex justify-content-between">
+                                <div class="col col-md-4">
                                     <textarea name="asunto" cols="40" rows="3" style="resize:none;" placeholder="  Ingresar asunto" id="asunto" required></textarea>
                                 </div>
                                 <div class="col col-md-4">
                                     <input type="text" name="producto" id="producto" placeholder="Ingresar Producto" maxlength="4" required>
                                 </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="nroTramite" id="nroTramite" placeholder="Nro Tramite" maxlength="10" required>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group" style="display:inline-flex">
+                            <div class="col-md-12 form-group d-flex justify-content-between">
                                 <div class="col col-md-6">
                                     <input class="inputbusqueda" type="text" placeholder="Buscar por Codigo Cliente..." id="buscarCliente" name="buscarCliente" onkeyup="BuscarCliente()">
                                 </div>

@@ -21,7 +21,7 @@ class informeExport implements FromQuery,WithHeadings
     {
         return [
             'ID_INFORME','CASILLA','REMITENTE','FECHA-HORA','COD_CLIENTE','ESTADO','ASUNTO','EDITADOS',
-            'PRODUCTO','USUARIO CREACION',
+            'PRODUCTO','NRO_TRAMITE','USUARIO CREACION',
             'USUARIO ACTUALIZACION','FECHA CREACION','FECHA ACTUALIZACION'
 
         ];
