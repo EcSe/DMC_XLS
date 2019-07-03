@@ -51,7 +51,7 @@ class informeController extends Controller
         $informe_update->VC_ASUNTO = $_POST['asunto'];
         $informe_update->VC_EDITADOS = $_POST['editados'];
         $informe_update->VC_PRODUCTO = $_POST['producto'];
-        $informe_model->VC_NRO_TRAMITE = $_POST['nroTramite'];
+        $informe_update->VC_NRO_TRAMITE = $_POST['nroTramite'];
         $informe_update->CH_ID_USUARIO_UPDATE = $usuario->CH_ID_USUARIO;
         $informe_update->DT_FECHA_UPDATE = now();
 
