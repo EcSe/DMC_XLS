@@ -7,6 +7,7 @@ use App\Models\informeModel;
 use Illuminate\Support\Facades\DB;
 
 use App\Exports\informeExport;
+use App\Exports\informeDiario;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 
@@ -135,4 +136,11 @@ class informeController extends Controller
         $mes = $request->input('mesInforme');
         return (new informeExport($mes))->download('ProduccionMes'.$mes.'.xlsx'); 
     }
+
+    public function exportInformeDiario()
+    {
+        $hoy = date("d-m-Y",strtotime(now()));
+        return (new informeDiario())->store('ProduccionDia '.$hoy.'.xlsx','reportes');
+    }
+
 }
